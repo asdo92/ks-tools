@@ -22,7 +22,7 @@ vcodec="libx264"
 b_vcodec="950k"
 # Presets: ultrafast, superfast, veryfast, faster,
 #  fast, medium (default), slow, slower, veryslow
-v_preset="medium"
+v_preset="slow"
 acodec="aac"
 b_acodec="128k"
 default_lang_audio="spa"
