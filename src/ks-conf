@@ -90,7 +90,7 @@ function check_create_conf_ks_mp4s() {
   rel_size="720x480"
   vcodec="libx264"
   b_vcodec="950k"
-  v_preset="medium"
+  v_preset="slow"
   acodec="aac"
   b_acodec="128k"
   default_lang_audio="spa"
