@@ -230,7 +230,8 @@ elif [ "${1}" == "-ev25" ] ; then
       echo "" && echo ""
       exit
     elif [ "${codec_encoded}" == "h265_encoded_10bit" ] ; then
-      ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+      #ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+      ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"
@@ -351,7 +352,8 @@ elif [ "${1}" == "-evpf" ] ; then
       echo "" && echo ""
       exit
     elif [ "${codec_encoded}" == "h265_encoded_10bit" ] ; then
-      ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+      #ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
+      ffmpeg -y -i "${2}" -map ${video_track} -c:v libx264 -profile:v high -pix_fmt yuv420p -b:v 3500k -preset medium "${current_dir}/temp-h265.mkv"
       ffmpeg -y -i "${current_dir}/temp-h265.mkv" -c copy -f h264 "${current_dir}/seeing_noaudio.h264"
       rm -rf "${current_dir}/temp-h265.mkv"
       ffmpeg -y -r 25 -i "${current_dir}/seeing_noaudio.h264" -c copy "${current_dir}/seeing.mp4"

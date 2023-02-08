@@ -152,7 +152,8 @@ else
   if [ -z "${hevc_profile_10bit}" ] ; then
     p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
   else
-    p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+    #p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+    p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
   fi
 fi
 
@@ -274,7 +275,8 @@ function crop_video() {
     if [ -z "${hevc_profile_10bit}" ] ; then
       p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
     else
-      p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+      #p_conversion="-c:v ${vcodec} -x264opts colorprim=bt2020:colormatrix=bt2020nc:transfer=smpte2084:chromaloc=2 -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
+      p_conversion="-c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec}"
     fi
   fi
   # Ask for patched
