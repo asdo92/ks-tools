@@ -5,8 +5,6 @@
 PREFIX=/usr
 
 install:
-	cp -rf src/ks-tools-ffmpeg-av.sh $(PREFIX)/bin/ks-tools-ffmpeg-av.sh
-	chmod +x $(PREFIX)/bin/ks-tools-ffmpeg-av.sh
 	cp -rf src/ks-upv $(PREFIX)/bin/ks-upv
 	chmod +x $(PREFIX)/bin/ks-upv
 	cp -rf src/ks-upa $(PREFIX)/bin/ks-upa
@@ -56,13 +54,10 @@ install:
 	mkdir -p $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools-rc $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools $(PREFIX)/share/ks-tools
-	cp -rf prompt/ks-tools-zui $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools.svg $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools.desktop $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools.desktop $(PREFIX)/share/applications
-	cp -rf prompt/ks-tools-zui.desktop $(PREFIX)/share/ks-tools
 	chmod +x $(PREFIX)/share/ks-tools/ks-tools
-	chmod +x $(PREFIX)/share/ks-tools/ks-tools-zui
 	
 install-cygwin:
 	cp -rf src/ks-upv $(PREFIX)/bin/ks-upv
@@ -309,13 +304,10 @@ compile-install:
 	mkdir -p $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools-rc $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools $(PREFIX)/share/ks-tools
-	cp -rf prompt/ks-tools-zui $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools.svg $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools.desktop $(PREFIX)/share/ks-tools
 	cp -rf prompt/ks-tools.desktop $(PREFIX)/share/applications
-	cp -rf prompt/ks-tools-zui.desktop $(PREFIX)/share/ks-tools
 	chmod +x $(PREFIX)/share/ks-tools/ks-tools
-	chmod +x $(PREFIX)/share/ks-tools/ks-tools-zui
 	
 compile-clean:
 	rm -rf build/ks-avi
@@ -342,7 +334,6 @@ compile-clean:
 	rm -rf build/ks-vob-wrapper
 	
 uninstall:
-	rm -rf $(PREFIX)/bin/ks-tools-ffmpeg-av.sh
 	rm -rf $(PREFIX)/bin/ks-upv
 	rm -rf $(PREFIX)/bin/ks-upa
 	rm -rf $(PREFIX)/bin/ks-upf
