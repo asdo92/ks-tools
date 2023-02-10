@@ -157,65 +157,6 @@ function showPathFile() {
   echo ${pathFile}
 }
 
-# Function to check and save fingerprint SSH
-# check_fingerprint <user> <server>
-function check_fingerprint() {
-  fingerprint_host=$(cat ${HOME}/.ssh/known_hosts 2> /dev/null | grep -o "${2}")
-  toolSelected=$(cat ${dirConfig}/ks-upload-tool | grep "rsa")
-  portSelected=$(cat ${dirConfig}/ks-upload-port)
-  if [ -z "${fingerprint_host}" ] ; then
-    # Run command for upload on Windows (Cygwin)
-    if [ "${cygwin}" == "yes" ] ; then
-      if [ -z "${toolSelected}" ] ; then
-        echo "* INFO: First connection to a server requires saving the fingerprint."
-        echo "* INFO: Only the first time you will have to enter the password."
-        echo ""
-        /usr/bin/ssh -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
-        OUTPUT=$?
-      else
-        echo "* INFO: First connection to a server requires saving the fingerprint."
-        echo "* INFO: Only the first time you will have to enter the password."
-        echo ""
-        /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
-        OUTPUT=$?
-      fi
-      if [ ${OUTPUT} -ne 0 ] ; then
-        echo ""
-        echo "+ ERROR: There has been a failure to connect to the server."
-        echo "* INFO: Rerun or check password."
-        echo ""
-        exit
-      else
-        echo "# ${2} cipher mark for ks-tools" >> ${HOME}/.ssh/known_hosts
-      fi
-    # Run command for upload on Unix systems
-    else
-      if [ -z "${toolSelected}" ] ; then
-        echo "* INFO: First connection to a server requires saving the fingerprint."
-        echo "* INFO: Only the first time you will have to enter the password."
-        echo ""
-        ssh -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
-        OUTPUT=$?
-      else
-        echo "* INFO: First connection to a server requires saving the fingerprint."
-        echo "* INFO: Only the first time you will have to enter the password."
-        echo ""
-        ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${1}@${2} echo "* Connection successfuly" &> /dev/null
-        OUTPUT=$?
-      fi
-      if [ ${OUTPUT} -ne 0 ] ; then
-        echo ""
-        echo "+ ERROR: There has been a failure to connect to the server."
-        echo "* INFO: Re-run or check password."
-        echo ""
-        exit
-      else
-        echo "# ${2} cipher mark for ks-tools" >> ${HOME}/.ssh/known_hosts
-      fi
-    fi
-  fi
-}
-
 # Function to send file to server.
 # Syntax: sendFile <password> <file path> <user> <server> <server path> [file name]
 function sendFile() {
@@ -227,35 +168,35 @@ function sendFile() {
     # Run command for upload on Windows (Cygwin)
     if [ "${cygwin}" == "yes" ] ; then
       if [ "${toolSelected}" == "rsync" ] ; then
-        /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
-        /usr/bin/sshpass -p ${1} /usr/bin/ssh -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
+        /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
       elif [ "${toolSelected}" == "rsync-rsa" ] ; then
-        /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
-        /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
+        /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
       elif [ "${toolSelected}" == "scp-rsa" ] ; then
-        /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
+        /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
       else
-        /usr/bin/sshpass -p ${1} /usr/bin/scp -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
+        /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
       fi
     # Run command for upload on Unix systems
     else
       if [ "${toolSelected}" == "rsync" ] ; then
-        rsync --progress -azL --rsh="sshpass -p ${1} ssh -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
-        sshpass -p ${1} ssh -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        rsync --progress -azL --rsh="sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
+        sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
       elif [ "${toolSelected}" == "rsync-rsa" ] ; then
-        rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
-        sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
+        sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
       elif [ "${toolSelected}" == "scp-rsa" ] ; then
-        sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
+        sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
       else
-        sshpass -p ${1} scp -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
+        sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
       fi
     fi
@@ -286,21 +227,21 @@ function checkChecksum() {
     if [ "${cygwin}" == "yes" ] ; then
       if [ -z "${toolSelected}" ] ; then
         checksumLocal=$(/usr/bin/md5sum ${2})
-        checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+        checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
         OUTPUT=$?
       else
         checksumLocal=$(/usr/bin/md5sum ${2})
-        checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+        checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
         OUTPUT=$?
       fi
     else
       if [ -z "${toolSelected}" ] ; then
         checksumLocal=$(md5sum ${2})
-        checksumServer=$(sshpass -p ${1} ssh -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+        checksumServer=$(sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
         OUTPUT=$?
       else
         checksumLocal=$(md5sum ${2})
-        checksumServer=$(sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+        checksumServer=$(sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
         OUTPUT=$?
       fi
     fi
@@ -774,7 +715,6 @@ elif [ "${1}" == "-i" ] ; then
   dirServer=$(cat ${dirConfig}/ks-upload-dirserver)
   dirLocal=$(cat ${dirConfig}/ks-upload-dirlocal)
   # Call the functions to perform the whole process.
-  check_fingerprint ${user} ${server}
   echo -n "* Scanning ${dirLocal} " && sleep 4
   echo ""
   if [ -d ${dirLocal} ] ; then
