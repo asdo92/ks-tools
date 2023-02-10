@@ -7,7 +7,7 @@ rem # Author: q3aql                      #
 rem # Contact: q3aql@duck.com            #
 rem # License: GPL v2.0                  #
 rem ######################################
-set VERSION=8.3.1
+set VERSION=8.4-dev
 
 rem # Start ks-tools terminal (bash)
 cd "%~d0%~p0"
