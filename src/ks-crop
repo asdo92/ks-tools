@@ -7,7 +7,7 @@
 # Contact: q3aql@duck.com                                     #
 ###############################################################
 VERSION="8.4-dev"
-M_DATE="040222"
+M_DATE="080223"
 
 # Global parameters
 dirTemp="/tmp"
