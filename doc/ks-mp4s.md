@@ -15,7 +15,7 @@ $ ks-mp4s </absolute/path/video.mkv> </path/prefix_name>
     - Resolution: 720x480
     - Video codec: libx264
     - Bitrate video: 950k
-    - Preset: medium
+    - Preset: slow
     - Audio codec: aac (stereo)
     - Bitrate audio: 128k
     - Default Audio: spa
@@ -29,7 +29,7 @@ $ ks-mp4s </absolute/path/video.mkv> </path/prefix_name>
     rel_size="720x480"
     vcodec="libx264"
     b_vcodec="950k"
-    v_preset="medium"
+    v_preset="slow"
     acodec="aac"
     b_acodec="128k"
     default_lang_audio="spa"
@@ -84,8 +84,8 @@ $ ks-mp4s </absolute/path/video.mkv> </path/prefix_name>
       ffmpeg -i "Example.mkv" -map 0:5 "Example.srt"
 
       # Convert the file 'Example.mkv' to MP4
-      ffmpeg -i "Example.mkv" -vsync cfr -af aresample=async=1:min_hard_comp=0.100000:first_pts=0 
-      -map 0:0 -map 0:1 -vf subtitles="Example.srt" -s 720x480 -c:v libx264 -profile:v high 
+      ffmpeg -i "Example.mkv" -fps_mode cfr -af aresample=async=1 -map 0:0 -map 0:1 
+      -vf subtitles="Example.srt" -s 720x480 -c:v libx264 -profile:v high 
       -b:v 950k -preset medium -c:a aac -b:a 128k -ac 2 -clev 3dB -slev -6dB 
       -metadata title="Example" -metadata date="2016" -metadata genre="Thriller" 
       -metadata:s:v:0 title="Example" 
