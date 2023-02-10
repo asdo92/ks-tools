@@ -7,7 +7,7 @@
 # Contact: q3aql@duck.com                                                    #
 ##############################################################################
 VERSION="8.4-dev"
-M_DATE="040222"
+M_DATE="100223"
 
 # Global parameters.
 dirTemp="/tmp"
@@ -151,6 +151,30 @@ function sendFile() {
       echo "+ Syncing folder ${2} to ${5} (${4})"
       /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    elif [ "${toolSelected}" == "rsync-e" ] ; then
+        keyscan_host=$(cat ~/.ssh/known_hosts | grep ${4})
+        if [ -z "${keyscan_host}" ] ; then
+          /usr/bin/ssh-keyscan -p ${portSelected} ${4} >> ~/.ssh/known_hosts
+        fi
+        # Sync files using rsync with expect
+        /usr/bin/expect <<EOF
+spawn /usr/bin/rsync --progress -rlDzL --port=${portSelected} ${2}/ ${3}@${4}:${5}/
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "scp-e" ] ; then
+        # Sync files using scp with expect
+        /usr/bin/expect <<EOF
+spawn /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
     elif [ "${toolSelected}" == "rsync-rsa" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
@@ -172,6 +196,30 @@ function sendFile() {
       echo "+ Syncing folder ${2} to ${5} (${4})"
       rsync --progress -azL --rsh="sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2}/ ${4}:${5}/ 2> /dev/null
       sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+    elif [ "${toolSelected}" == "rsync-e" ] ; then
+        keyscan_host=$(cat ~/.ssh/known_hosts | grep ${4})
+        if [ -z "${keyscan_host}" ] ; then
+          ssh-keyscan -p ${portSelected} ${4} >> ~/.ssh/known_hosts
+        fi
+        # Sync files using rsync with expect
+        expect <<EOF
+spawn rsync --progress -rlDzL --port=${portSelected} ${2}/ ${3}@${4}:${5}/
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "scp-e" ] ; then
+        # Sync files using scp with expect
+        expect <<EOF
+spawn scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
     elif [ "${toolSelected}" == "rsync-rsa" ] ; then
       echo ""
       echo "+ Syncing folder ${2} to ${5} (${4})"
@@ -375,8 +423,12 @@ function editConfig() {
       echo "- rsync"
       echo "- scp-rsa (legacy RSA algorithm)"
       echo "- rsync-rsa (legacy RSA algorithm)"
+      echo "- scp-e"
+      echo "- rsync-e"
       echo ""
-      echo -n "* [Default: scp] Type upload tool (scp/rsync/scp-rsa/rsync-rsa): " ; read TOOL
+      echo "* Note: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
+      echo "" 
+      echo -n "* [Default: scp] Type upload tool (scp/rsync/scp-rsa/rsync-rsa/scp-e/rsync-e): " ; read TOOL
       if [ -z "${TOOL}" ] ; then
         upvTool="scp"
       elif [ "${TOOL}" == "rsync" ] ; then
@@ -385,6 +437,10 @@ function editConfig() {
         upvTool="rsync-rsa"
       elif [ "${TOOL}" == "scp-rsa" ] ; then
         upvTool="scp-rsa"
+      elif [ "${TOOL}" == "scp-e" ] ; then
+        upvTool="scp-e"
+      elif [ "${TOOL}" == "rsync-e" ] ; then
+        upvTool="rsync-e"
       else  
         upvTool="scp"
       fi
@@ -513,6 +569,12 @@ function checkDependencies() {
   OUTPUT=$?
   if [ ${OUTPUT} -ne 0 ] ; then
     echo "* The 'sshpass' tool is not installed!"
+    dependence=1
+  fi
+  expect -v &> /dev/null
+  OUTPUT=$?
+  if [ ${OUTPUT} -ne 0 ] ; then
+    echo "* The 'expect' tool is not installed!"
     dependence=1
   fi
   md5sum --help &> /dev/null
@@ -649,12 +711,12 @@ elif [ "${1}" == "-i" ] ; then
   if [ "${current_tool}" == "scp" ] ; then
     echo ""
     echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upr -e)"
+    echo "* IMPORTANT: It's possible switch to 'rsync' or 'scp-e' if you wish (Command: ks-upr -e)"
   fi
   if [ "${current_tool}" == "scp-rsa" ] ; then
     echo ""
-    echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-    echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upr -e)"
+    echo "* NOTE: You are using 'scp-rsa' to upload files and no progress will be shown."
+    echo "* IMPORTANT: It's possible switch to 'rsync-rsa' if you wish (Command: ks-upr -e)"
   fi
   if [ -d ${dirLocal} ] ; then
     sendFile ${password} "${dirLocal}" ${user} ${server} ${dirServer}

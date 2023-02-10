@@ -7,7 +7,7 @@
 # Contact: q3aql@duck.com                                              #
 ########################################################################
 VERSION="8.4-dev"
-M_DATE="040222"
+M_DATE="100223"
 
 # Global parameters.
 dirTemp="/tmp"
@@ -144,6 +144,46 @@ function sendFile() {
         /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
         /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
         OUTPUT=$?
+      elif [ "${toolSelected}" == "rsync-e" ] ; then
+        keyscan_host=$(cat ~/.ssh/known_hosts | grep ${4})
+        if [ -z "${keyscan_host}" ] ; then
+          /usr/bin/ssh-keyscan -p ${portSelected} ${4} >> ~/.ssh/known_hosts
+        fi
+        # Sync files using rsync with expect
+        /usr/bin/expect <<EOF
+spawn /usr/bin/rsync --progress -azL --port=${portSelected} ${2} ${3}@${4}:${5}
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        # Remove temporal files
+        /usr/bin/expect <<EOF
+spawn /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.*
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "scp-e" ] ; then
+        # Sync files using scp with expect
+        /usr/bin/expect <<EOF
+spawn /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        # Remove temporal files
+        /usr/bin/expect <<EOF
+spawn /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.*
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
       elif [ "${toolSelected}" == "rsync-rsa" ] ; then
         /usr/bin/rsync --progress -azL --rsh="/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
         /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
@@ -160,6 +200,46 @@ function sendFile() {
       if [ "${toolSelected}" == "rsync" ] ; then
         rsync --progress -azL --rsh="sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
         sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "rsync-e" ] ; then
+        keyscan_host=$(cat ~/.ssh/known_hosts | grep ${4})
+        if [ -z "${keyscan_host}" ] ; then
+          ssh-keyscan -p ${portSelected} ${4} >> ~/.ssh/known_hosts
+        fi
+        # Sync files using rsync with expect
+        expect <<EOF
+spawn rsync --progress -azL --port=${portSelected} ${2} ${3}@${4}:${5}
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        # Remove temporal files
+        expect <<EOF
+spawn ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.*
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "scp-e" ] ; then
+        # Sync files using scp with expect
+        expect <<EOF
+spawn scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5}
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
+        # Remove temporal files
+        expect <<EOF
+spawn ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.*
+set timeout -1
+expect "*?assword:*"
+send "${1}\n"
+expect eof
+EOF
         OUTPUT=$?
       elif [ "${toolSelected}" == "rsync-rsa" ] ; then
         rsync --progress -azL --rsh="sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
@@ -195,6 +275,7 @@ function checkChecksum() {
   echo -n "Checking checksum... " && sleep 4
   echo ""
   toolSelected=$(cat ${dirConfig}/ks-upload-tool | grep "rsa")
+  selectedTool=$(cat ${dirConfig}/ks-upload-tool)
   portSelected=$(cat ${dirConfig}/ks-upload-port)
   while [ ${correct} -eq 0 ] ; do
     if [ "${cygwin}" == "yes" ] ; then
@@ -202,6 +283,12 @@ function checkChecksum() {
         checksumLocal=$(/usr/bin/md5sum ${2})
         checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
         OUTPUT=$?
+      elif [ "${selectedTool}" == "rsync-e" ] ; then
+        echo > /dev/null
+        OUTPUT=0
+      elif [ "${selectedTool}" == "scp-e" ] ; then
+        echo > /dev/null
+        OUTPUT=0
       else
         checksumLocal=$(/usr/bin/md5sum ${2})
         checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
@@ -212,6 +299,10 @@ function checkChecksum() {
         checksumLocal=$(md5sum ${2})
         checksumServer=$(sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
         OUTPUT=$?
+      elif [ "${selectedTool}" == "rsync-e" ] ; then
+        echo > /dev/null
+      elif [ "${selectedTool}" == "scp-e" ] ; then
+        echo > /dev/null
       else
         checksumLocal=$(md5sum ${2})
         checksumServer=$(sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
@@ -227,9 +318,17 @@ function checkChecksum() {
         correct=1
       fi
     else
+      if [ "${selectedTool}" == "rsync-e" ] ; then
+        echo > /dev/null
+        correct=1
+      elif [ "${selectedTool}" == "scp-e" ] ; then
+        echo > /dev/null
+        correct=1
+      else
       echo "Local checksum: ${checksumLocal}"
       echo "Server checksum: ${checksumServer}"
       correct=1
+      fi
     fi
   done
 }
@@ -420,8 +519,12 @@ function editConfig() {
       echo "- rsync"
       echo "- scp-rsa (legacy RSA algorithm)"
       echo "- rsync-rsa (legacy RSA algorithm)"
+      echo "- scp-e"
+      echo "- rsync-e"
       echo ""
-      echo -n "* [Default: scp] Type upload tool (scp/rsync/scp-rsa/rsync-rsa): " ; read TOOL
+      echo "* Note: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
+      echo "" 
+      echo -n "* [Default: scp] Type upload tool (scp/rsync/scp-rsa/rsync-rsa/scp-e/rsync-e): " ; read TOOL
       if [ -z "${TOOL}" ] ; then
         upvTool="scp"
       elif [ "${TOOL}" == "rsync" ] ; then
@@ -430,6 +533,10 @@ function editConfig() {
         upvTool="rsync-rsa"
       elif [ "${TOOL}" == "scp-rsa" ] ; then
         upvTool="scp-rsa"
+      elif [ "${TOOL}" == "scp-e" ] ; then
+        upvTool="scp-e"
+      elif [ "${TOOL}" == "rsync-e" ] ; then
+        upvTool="rsync-e"
       else  
         upvTool="scp"
       fi
@@ -558,6 +665,12 @@ function checkDependencies() {
   OUTPUT=$?
   if [ ${OUTPUT} -ne 0 ] ; then
     echo "* The 'sshpass' tool is not installed!"
+    dependence=1
+  fi
+  expect -v &> /dev/null
+  OUTPUT=$?
+  if [ ${OUTPUT} -ne 0 ] ; then
+    echo "* The 'expect' tool is not installed!"
     dependence=1
   fi
   md5sum --help &> /dev/null
@@ -699,12 +812,12 @@ elif [ "${1}" == "-i" ] ; then
     current_tool=$(cat ${dirConfig}/ks-upload-tool)
     if [ "${current_tool}" == "scp" ] ; then
       echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upa -e)"
+      echo "* IMPORTANT: It's possible switch to 'rsync' or 'scp-e' if you wish (Command: ks-upa -e)"
       echo ""
     fi
     if [ "${current_tool}" == "scp-rsa" ] ; then
-      echo "* NOTE: You are using 'scp' to upload files and no progress will be shown."
-      echo "* IMPORTANT: It's possible switch to 'rsync' if you wish (Command: ks-upa -e)"
+      echo "* NOTE: You are using 'scp-rsa' to upload files and no progress will be shown."
+      echo "* IMPORTANT: It's possible switch to 'rsync-rsa' if you wish (Command: ks-upa -e)"
       echo ""
     fi
     while [ ${count} -le ${totalFiles} ] ; do
@@ -712,7 +825,13 @@ elif [ "${1}" == "-i" ] ; then
       fullPathFile=$(showPathFile ${count})
       echo "Uploading '${fullNameFile}' "
       sendFile ${password} ${fullPathFile} ${user} ${server} ${dirServer} ${fullNameFile}
-      checkChecksum ${password} ${fullPathFile} ${user} ${server} ${dirServer}/${fullNameFile}
+      if [ "${current_tool}" == "scp-e" ] ; then
+        echo > /dev/null
+      elif [ "${current_tool}" == "rsync-e" ] ; then
+        echo > /dev/null
+      else
+        checkChecksum ${password} ${fullPathFile} ${user} ${server} ${dirServer}/${fullNameFile}
+      fi
       echo ""
       count=$(expr ${count} + 1)
     done
