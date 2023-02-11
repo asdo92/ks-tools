@@ -168,7 +168,7 @@ EOF
       elif [ "${toolSelected}" == "scp-e" ] ; then
         # Sync files using scp with expect
         /usr/bin/expect <<EOF
-spawn /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/
+spawn /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/ ${3}@${4}:${5}/
 set timeout -1
 expect "*?assword:*"
 send "${1}\n"
@@ -213,7 +213,7 @@ EOF
       elif [ "${toolSelected}" == "scp-e" ] ; then
         # Sync files using scp with expect
         expect <<EOF
-spawn scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/
+spawn scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/ ${3}@${4}:${5}/
 set timeout -1
 expect "*?assword:*"
 send "${1}\n"
