@@ -13,7 +13,8 @@ M_DATE="100223"
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
 IFS="abcdefghijklmnopqrstyvwxzABCDEFHIJKLMNOPQRSTYVWXZ@/()"
 ffmpeg_version=$(echo ${ffmpeg_version})
-IFS=""
+IFS=$' \t\n'
+unset IFS
 if [ -z "${ffmpeg_version}" ] ; then
   video_sync="vsync"
 else
