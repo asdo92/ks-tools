@@ -563,7 +563,7 @@ function showHelp() {
 # for the execution are installed.
 function checkDependencies() {
   path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
-  dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat"
+  dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan"
   dependencies_found=""
   dependencies_not_found=""
   for checkPath in ${path_check} ; do
