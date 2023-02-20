@@ -483,7 +483,7 @@ else
     exit
   else
     if [ "${subtitles_y_n}" == "y" ] ; then
-      echo ${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
+      ${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
       if [ "${patch_thread}" == "y" ] ; then
         if [ ! -z "${hevc_hdr}" ] ; then
           ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt" -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
