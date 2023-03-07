@@ -231,6 +231,19 @@ else
   exit
 fi
 
+# Load profile for codecs
+profile_codec=" "
+selected_codec="${vcodec}"
+if [ "${selected_codec}" == "libx264" ] ; then
+  profile_codec=" -profile:v high "
+elif [ "${selected_codec}" == "libx265" ] ; then
+  profile_codec=" -profile:v main "
+elif [ "${selected_codec}" == "libaom-av1" ] ; then
+  profile_codec=" -profile:v main "
+else
+  profile_codec=" "
+fi
+
 # Conversion parameters
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
@@ -245,12 +258,12 @@ hevc_hdr_smp=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:"
 codec_h265_hevc="${codec_h265}${codec_hevc}${yuv420p10le}${hevc_main10}"
 hevc_hdr="${hevc_hdr_bt}${hevc_hdr_smp}"
 if [ -z "${codec_h265_hevc}" ] ; then
-  p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+  p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
 else
   if [ -z "${hevc_hdr}" ] ; then
-    p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+    p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
   else
-    p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+    p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
   fi
 fi
 
@@ -390,12 +403,12 @@ else
   else
     rel_size="${resolution}"
     if [ -z "${codec_h265_hevc}" ] ; then
-      p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+      p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
     else
       if [ -z "${hevc_hdr}" ] ; then
-        p_conversion="-s ${rel_size} -c:v ${vcodec} -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+        p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
       else
-        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
       fi
     fi
   fi
@@ -453,7 +466,7 @@ else
     if [ "${patch_thread}" == "y" ] ; then
       echo "  # Convert the file '${1}' to MP4"
       if [ ! -z "${hevc_hdr}" ] ; then
-        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\" -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
       else
         echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
@@ -461,7 +474,7 @@ else
     else
       echo "  # Convert the file '${1}' to MP4"
       if [ ! -z "${hevc_hdr}" ] ; then
-        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\" -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
       else
         echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
@@ -486,13 +499,13 @@ else
       ${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
       if [ "${patch_thread}" == "y" ] ; then
         if [ ! -z "${hevc_hdr}" ] ; then
-          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt" -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
         else
           ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
         fi
       else
         if [ ! -z "${hevc_hdr}" ] ; then
-          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt" -profile:v high -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
         else
           ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
         fi
