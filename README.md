@@ -17,6 +17,8 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-mp4s-folder](doc/ks-mp4s-folder.md) - Convert videos from folder to MP4 format (Series).
     * [ks-avi](doc/ks-avi.md) - Convert video file to compact and efficient AVI (libxvid + mp3).
     * [ks-vob](doc/ks-vob.md) - Convert video file to VOB (DVD splitet) format.
+    * [ks-av1](doc/ks-av1.md) - Convert video file to compact and efficient AV1 codec (libsvtav1 + libvorbis).
+    * [ks-av1s](doc/ks-av1s.md) - Convert video file to compact and efficient AV1 codec (Series).
   
   * `Tools for convert audio:`
 
