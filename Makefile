@@ -53,6 +53,10 @@ install:
 	chmod +x $(PREFIX)/bin/ks-avi-wrapper
 	cp -rf wrapper/ks-vob-wrapper $(PREFIX)/bin/ks-vob-wrapper
 	chmod +x $(PREFIX)/bin/ks-vob-wrapper
+	cp -rf wrapper/ks-av1-wrapper $(PREFIX)/bin/ks-av1-wrapper
+	chmod +x $(PREFIX)/bin/ks-av1-wrapper
+	cp -rf wrapper/ks-av1s-wrapper $(PREFIX)/bin/ks-av1s-wrapper
+	chmod +x $(PREFIX)/bin/ks-av1s-wrapper
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
 	
@@ -82,6 +86,8 @@ compile:
 	cp -rf wrapper/ks-mp4s-wrapper build
 	cp -rf wrapper/ks-mp4-wrapper build
 	cp -rf wrapper/ks-vob-wrapper build
+	cp -rf wrapper/ks-av1-wrapper build
+	cp -rf wrapper/ks-av1s-wrapper build
 	shc -f build/ks-avi -o build/ks-avi.out
 	shc -f build/ks-crop -o build/ks-crop.out
 	shc -f build/ks-mix -o build/ks-mix.out
@@ -106,6 +112,8 @@ compile:
 	shc -f build/ks-mp4s-wrapper -o build/ks-mp4s-wrapper.out
 	shc -f build/ks-mp4-wrapper -o build/ks-mp4-wrapper.out
 	shc -f build/ks-vob-wrapper -o build/ks-vob-wrapper.out
+	shc -f build/ks-av1-wrapper -o build/ks-av1-wrapper.out
+	shc -f build/ks-av1s-wrapper -o build/ks-av1s-wrapper.out
 	rm -rf build/ks-avi.out
 	rm -rf build/ks-crop.out
 	rm -rf build/ks-mix.out
@@ -130,6 +138,8 @@ compile:
 	rm -rf build/ks-mp4s-wrapper.out
 	rm -rf build/ks-mp4-wrapper.out
 	rm -rf build/ks-vob-wrapper.out
+	rm -rf build/ks-av1-wrapper.out
+	rm -rf build/ks-av1s-wrapper.out
 	rm -rf build/ks-avi
 	rm -rf build/ks-crop
 	rm -rf build/ks-mix
@@ -152,6 +162,8 @@ compile:
 	rm -rf build/ks-mp4s-wrapper
 	rm -rf build/ks-mp4-wrapper
 	rm -rf build/ks-vob-wrapper
+	rm -rf build/ks-av1-wrapper
+	rm -rf build/ks-av1s-wrapper
 	mv build/ks-avi.x.c build/ks-avi.c
 	mv build/ks-crop.x.c build/ks-crop.c
 	mv build/ks-mix.x.c build/ks-mix.c
@@ -176,6 +188,8 @@ compile:
 	mv build/ks-mp4s-wrapper.x.c build/ks-mp4s-wrapper.c
 	mv build/ks-mp4-wrapper.x.c build/ks-mp4-wrapper.c
 	mv build/ks-vob-wrapper.x.c build/ks-vob-wrapper.c
+	mv build/ks-av1-wrapper.x.c build/ks-av1-wrapper.c
+	mv build/ks-av1s-wrapper.x.c build/ks-av1s-wrapper.c
 	gcc build/ks-avi.c -o build/ks-avi
 	gcc build/ks-avi-wrapper.c -o build/ks-avi-wrapper
 	gcc build/ks-crop.c -o build/ks-crop
@@ -200,6 +214,8 @@ compile:
 	gcc build/ks-av1s.c -o build/ks-av1s
 	gcc build/ks-conf.c -o build/ks-conf
 	gcc build/ks-vob-wrapper.c -o build/ks-vob-wrapper
+	gcc build/ks-av1-wrapper.c -o build/ks-av1-wrapper
+	gcc build/ks-av1s-wrapper.c -o build/ks-av1s-wrapper
 	
 compile-install:
 	cp -rf build/ks-upv $(PREFIX)/bin/ks-upv
@@ -250,6 +266,10 @@ compile-install:
 	chmod +x $(PREFIX)/bin/ks-avi-wrapper
 	cp -rf build/ks-vob-wrapper $(PREFIX)/bin/ks-vob-wrapper
 	chmod +x $(PREFIX)/bin/ks-vob-wrapper
+	cp -rf build/ks-av1-wrapper $(PREFIX)/bin/ks-av1-wrapper
+	chmod +x $(PREFIX)/bin/ks-av1-wrapper
+	cp -rf build/ks-av1s-wrapper $(PREFIX)/bin/ks-av1s-wrapper
+	chmod +x $(PREFIX)/bin/ks-av1s-wrapper
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
 	
@@ -278,6 +298,8 @@ compile-clean:
 	rm -rf build/ks-mp4s-wrapper
 	rm -rf build/ks-mp4-wrapper
 	rm -rf build/ks-vob-wrapper
+	rm -rf build/ks-av1-wrapper
+	rm -rf build/ks-av1s-wrapper
 	
 uninstall:
 	rm -rf $(PREFIX)/bin/ks-upv
@@ -304,4 +326,6 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mp4s-wrapper
 	rm -rf $(PREFIX)/bin/ks-avi-wrapper
 	rm -rf $(PREFIX)/bin/ks-vob-wrapper
+	rm -rf $(PREFIX)/bin/ks-av1-wrapper
+	rm -rf $(PREFIX)/bin/ks-av1s-wrapper
 	rm -rf $(PREFIX)/bin/cygwin-path
