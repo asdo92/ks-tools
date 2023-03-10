@@ -1,0 +1,157 @@
+#!/bin/bash
+
+##################################################################################
+# ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec) (Series) #
+# Date: 10-03-2023                                                               #
+# Author: q3aql                                                                  #
+# Contact: q3aql@duck.com                                                        #
+##################################################################################
+VERSION="8.4-dev"
+M_DATE="100323"
+
+# Variables
+tempFile="/tmp/ks-av1s-folder.txt"
+tempFileTest="/tmp/ks-av1s-folder-test.txt"
+formatFiles="mp4 avi mpg mpeg mov wmv mkv ogv webm rm flv vob ts"
+
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  source "/usr/bin/cygwin-alias.sh"
+fi
+
+# Check if ffmpeg is installed
+path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
+dependencies="ffmpeg grep find grep cut head tail cat"
+dependencies_found=""
+dependencies_not_found=""
+for checkPath in ${path_check} ; do
+  for checkDependencies in ${dependencies} ; do
+    if [ -f ${checkPath}/${checkDependencies} ] ; then
+      dependencies_found="${dependencies_found} ${checkDependencies}"
+    fi
+  done
+done
+for notFound in ${dependencies} ; do
+  check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
+  check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
+  if_not_found="${check_found_one}${check_found_two}"
+  if [ -z "${if_not_found}" ] ; then
+    dependencies_not_found="${dependencies_not_found} ${notFound}"
+  fi
+done
+# Show if all tools are installed
+if [ -z "${dependencies_not_found}" ] ; then
+  echo > /dev/null
+else
+  echo ""
+  echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "* Some required tools are not installed:${dependencies_not_found}"
+  echo "* The process has been stopped"
+  echo ""
+  exit
+fi
+
+# Show help when folder is empty
+if [ -z "${1}" ] ; then
+  echo ""
+  echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Convert videos from folder to MP4 format (Series)"
+  echo ""
+  echo "+ Syntax: "
+  echo ""
+  echo "  $ ks-av1s-folder </path/folder> [subs]"
+  echo ""
+  echo " + Examples: "
+  echo "     $ ks-av1s-folder /data/Westworld"
+  echo "     $ ks-av1s-folder /data/Daredevil subs"
+  echo ""
+  echo "* Notes:"
+  echo ""
+  echo " + The option 'subs' apply detection & rendering the forced subtitles."
+  echo " + You must not use spaces in folders and video files."
+  echo ""
+  exit
+fi
+
+# Check if folder exist
+if [ -d "${1}" ] ; then
+  echo null > /dev/null
+else
+  echo ""
+  echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "+ The folder '${1}' does not exist!"
+  echo ""
+  exit
+fi
+
+# Scan videos files format
+clear
+echo ""
+echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
+echo ""
+echo "- Convert videos from folder to MP4 format (Series)"
+echo ""
+echo -n "* Scanning ${1} "
+echo ""
+rm -rf ${tempFile} && touch ${tempFile}
+for format in ${formatFiles} ; do
+  find "${1}"/*.${format} &> ${tempFileTest}
+  if [ $? -ne 0 ] ; then
+    echo "null" > /dev/null
+  else
+    echo "+ Video file(s) in .${format} found!"
+    cd "${1}" && ls -1 *.${format} &>> ${tempFile}
+    fail=0
+  fi
+done
+
+# Init the conversion files
+num_files=$(cat ${tempFile} | wc -l)
+if [ ${num_files} -eq 0 ] ; then
+  echo ""
+  echo "+ No video file(s) found in folder '${1}"
+  echo ""
+  exit
+else
+  echo ""
+  echo "* Files to convert (${1}):"
+  convert_files=1
+  if [ "${2}" == "subs" ] ; then
+    subtitles_enabled=1
+    subtitles_show="with subtitles"
+  else
+    subtitles_enabled=0
+    subtitles_show="without subtitles"
+  fi
+  while [ ${convert_files} -le ${num_files} ] ; do
+    show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+    echo "  + ${show_file} (${subtitles_show})"
+    convert_files=$(expr ${convert_files} + 1)
+  done
+  echo ""
+  echo "* The output folder will be '${1}/to-mp4'"
+  # Execute commands for conversion
+  echo ""
+  echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
+  if [ "${run_commands_ffmpeg}" == "n" ] ; then
+    exit
+  else
+    convert_files=1
+    cd "${1}" && mkdir -p to-mp4 && rm -rf to-mp4/*
+    while [ ${convert_files} -le ${num_files} ] ; do
+      show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
+      if [ ${subtitles_enabled} -eq 1 ] ; then
+        fname=$(echo "${show_file}" | cut -d "." -f 1)
+        ks-av1s-wrapper --conv-with-sub "${show_file}" "to-mp4/${fname}"
+      else
+        fname=$(echo "${show_file}" | cut -d "." -f 1)
+        ks-av1s-wrapper --conv "${show_file}" "to-mp4/${fname}"
+      fi
+      convert_files=$(expr ${convert_files} + 1)
+    done
+  fi
+fi
