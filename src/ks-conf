@@ -1,13 +1,13 @@
 #!/bin/bash
 
-######################################################################
-# ks-mp3 (ks-tools) - Tool for create and modify configuration files #
-# Date: 04-02-2022                                                   #
-# Author: q3aql                                                      #
-# Contact: q3aql@duck.com                                            #
-######################################################################
+#######################################################################
+# ks-conf (ks-tools) - Tool for create and modify configuration files #
+# Date: 10-03-2023                                                    #
+# Author: q3aql                                                       #
+# Contact: q3aql@duck.com                                             #
+#######################################################################
 VERSION="8.4-dev"
-M_DATE="040222"
+M_DATE="100323"
 
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
@@ -287,6 +287,142 @@ function check_create_conf_ks_avi() {
   fi
 }
 
+# Check and create configuration file for ks-av1
+function check_create_conf_ks_av1() {
+  configFolder=${HOME}/.ks-tools 
+  configFile=${configFolder}/ks-av1
+  rel_size="1280x534"
+  vcodec="libsvtav1"
+  b_vcodec="2000k"
+  v_preset="disabled"
+  acodec="libvorbis"
+  b_acodec="160k"
+  default_lang_audio="spa"
+  default_lang_subt="spa"
+  v_ext="webm"
+  mkdir -p ${configFolder}
+  if [ -f ${configFile} ] ; then
+    exist_rel_size=$(cat ${configFile} | grep "rel_size=")
+    exist_vcodec=$(cat ${configFile} | grep "vcodec=" | cut -c2 | cut -d "_" -f 1)
+    exist_b_vcodec=$(cat ${configFile} | grep "b_vcodec=") 
+    exist_v_preset=$(cat ${configFile} | grep "v_preset=") 
+    exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
+    exist_b_acodec=$(cat ${configFile} | grep "b_acodec=") 
+    exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
+    exist_default_lang_subt=$(cat ${configFile} | grep "default_lang_subt=") 
+    exist_v_ext=$(cat ${configFile} | grep "v_ext=")
+    if [ -z ${exist_rel_size} ] ; then
+      echo "rel_size=${rel_size}" >> ${configFile}
+    fi
+    if [ -z ${exist_vcodec} ] ; then
+      echo "vcodec=${vcodec}" >> ${configFile}
+    fi 
+    if [ -z ${exist_b_vcodec} ] ; then
+      echo "b_vcodec=${b_vcodec}" >> ${configFile}
+    fi
+    if [ -z ${exist_v_preset} ] ; then
+      echo "v_preset=${v_preset}" >> ${configFile}
+    fi
+    if [ -z ${exist_acodec} ] ; then
+      echo "acodec=${acodec}" >> ${configFile}
+    fi
+    if [ -z ${exist_b_acodec} ] ; then
+      echo "b_acodec=${b_acodec}" >> ${configFile}
+    fi
+    if [ -z ${exist_default_lang_audio} ] ; then
+      echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+    fi
+    if [ -z ${exist_default_lang_subt} ] ; then
+      echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
+    fi
+    if [ -z ${exist_v_ext} ] ; then
+      echo "v_ext=${v_ext}" >> ${configFile}
+    fi
+    source ${configFile}
+  else
+    echo "#!/bin/bash" > ${configFile}
+    echo "" >> ${configFile}
+    echo "rel_size=${rel_size}" >> ${configFile}
+    echo "vcodec=${vcodec}" >> ${configFile}
+    echo "b_vcodec=${b_vcodec}" >> ${configFile}
+    echo "v_preset=${v_preset}" >> ${configFile}
+    echo "acodec=${acodec}" >> ${configFile}
+    echo "b_acodec=${b_acodec}" >> ${configFile}
+    echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+    echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
+    echo "v_ext=${v_ext}" >> ${configFile}
+    source ${configFile}
+  fi
+}
+
+# Check and create configuration file for ks-av1s
+function check_create_conf_ks_av1s() {
+  configFolder=${HOME}/.ks-tools 
+  configFile=${configFolder}/ks-av1s
+  rel_size="720x480"
+  vcodec="libsvtav1"
+  b_vcodec="850k"
+  v_preset="disabled"
+  acodec="libvorbis"
+  b_acodec="128k"
+  default_lang_audio="spa"
+  default_lang_subt="spa"
+  v_ext="webm"
+  mkdir -p ${configFolder}
+  if [ -f ${configFile} ] ; then
+    exist_rel_size=$(cat ${configFile} | grep "rel_size=")
+    exist_vcodec=$(cat ${configFile} | grep "vcodec=" | cut -c2 | cut -d "_" -f 1)
+    exist_b_vcodec=$(cat ${configFile} | grep "b_vcodec=") 
+    exist_v_preset=$(cat ${configFile} | grep "v_preset=") 
+    exist_acodec=$(cat ${configFile} | grep "acodec" | cut -c2 | cut -d "_" -f 1) 
+    exist_b_acodec=$(cat ${configFile} | grep "b_acodec=") 
+    exist_default_lang_audio=$(cat ${configFile} | grep "default_lang_audio=") 
+    exist_default_lang_subt=$(cat ${configFile} | grep "default_lang_subt=") 
+    exist_v_ext=$(cat ${configFile} | grep "v_ext=")
+    if [ -z ${exist_rel_size} ] ; then
+      echo "rel_size=${rel_size}" >> ${configFile}
+    fi
+    if [ -z ${exist_vcodec} ] ; then
+      echo "vcodec=${vcodec}" >> ${configFile}
+    fi 
+    if [ -z ${exist_b_vcodec} ] ; then
+      echo "b_vcodec=${b_vcodec}" >> ${configFile}
+    fi
+    if [ -z ${exist_v_preset} ] ; then
+      echo "v_preset=${v_preset}" >> ${configFile}
+    fi
+    if [ -z ${exist_acodec} ] ; then
+      echo "acodec=${acodec}" >> ${configFile}
+    fi
+    if [ -z ${exist_b_acodec} ] ; then
+      echo "b_acodec=${b_acodec}" >> ${configFile}
+    fi
+    if [ -z ${exist_default_lang_audio} ] ; then
+      echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+    fi
+    if [ -z ${exist_default_lang_subt} ] ; then
+      echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
+    fi
+    if [ -z ${exist_v_ext} ] ; then
+      echo "v_ext=${v_ext}" >> ${configFile}
+    fi
+    source ${configFile}
+  else
+    echo "#!/bin/bash" > ${configFile}
+    echo "" >> ${configFile}
+    echo "rel_size=${rel_size}" >> ${configFile}
+    echo "vcodec=${vcodec}" >> ${configFile}
+    echo "b_vcodec=${b_vcodec}" >> ${configFile}
+    echo "v_preset=${v_preset}" >> ${configFile}
+    echo "acodec=${acodec}" >> ${configFile}
+    echo "b_acodec=${b_acodec}" >> ${configFile}
+    echo "default_lang_audio=${default_lang_audio}" >> ${configFile}
+    echo "default_lang_subt=${default_lang_subt}" >> ${configFile}
+    echo "v_ext=${v_ext}" >> ${configFile}
+    source ${configFile}
+  fi
+}
+
 # Check and create configuration file for ks-mp3/ks-mp3-album
 function check_create_conf_ks_mp3() {
   configFolder=${HOME}/.ks-tools 
@@ -378,6 +514,8 @@ edit_video_config() {
   check_create_conf_ks_mp4s
   check_create_conf_ks_mp4k
   check_create_conf_ks_avi
+  check_create_conf_ks_av1
+  check_create_conf_ks_av1s
   name_file=${1}
   editing=0
   while [ ${editing} -eq 0 ] ; do
@@ -432,6 +570,14 @@ edit_video_config() {
        echo ""
        echo "* Recommended: mpeg4 / libxvid"
       fi
+      if [ "$v_ext" == "webm" ] ; then
+       echo ""
+       echo "* Recommended: libvpx-vp9 / libsvtav1 / libaom-av1"
+      fi
+      if [ "$v_ext" == "mkv" ] ; then
+       echo ""
+       echo "* Recommended: libx264 / libx265 / libsvtav1 / libaom-av1"
+      fi
       echo ""
       echo -n "* [Current: ${vcodec}] Type the video codec: " ; read videocodec
       if [ -z ${videocodec} ] ; then
@@ -452,7 +598,7 @@ edit_video_config() {
     elif [ "${option}" == "b" ] ; then
       # Set bitrate for video
       echo ""
-      echo "* Recommended: 950k / 2400k / 3000k / 6000k / 10000k"
+      echo "* Recommended: 850k / 950k / 2000k / 2400k / 3000k / 6000k / 10000k"
       echo ""
       echo -n "* [Current: ${b_vcodec}] Type bitrate for video: " ; read videobitrate
       if [ -z ${videobitrate} ] ; then
@@ -502,6 +648,14 @@ edit_video_config() {
        echo ""
        echo "* Recommended: ac3 / libmp3lame / mp2"
       fi
+      if [ "$v_ext" == "webm" ] ; then
+       echo ""
+       echo "* Recommended: libvorbis / libopus"
+      fi
+      if [ "$v_ext" == "mkv" ] ; then
+       echo ""
+       echo "* Recommended: aac / libvorbis / libopus / ac3 / libmp3lame"
+      fi
       echo ""
       echo -n "* [Current: ${acodec}] Type the audio codec: " ; read audiocodec
       if [ -z ${audiocodec} ] ; then
@@ -522,7 +676,7 @@ edit_video_config() {
     elif [ "${option}" == "i" ] ; then
       # Set bitrate for audio
       echo ""
-      echo "* Recommended: 92k / 128k / 192k / 256k / 320k / 640k"
+      echo "* Recommended: 92k / 128k / 160k / 192k / 256k / 320k / 640k"
       echo ""
       echo -n "* [Current: ${b_acodec}] Type bitrate for audio: " ; read audiobitrate
       if [ -z ${audiobitrate} ] ; then
@@ -695,6 +849,8 @@ check_create_conf_ks_mp4
 check_create_conf_ks_mp4s
 check_create_conf_ks_mp4k
 check_create_conf_ks_avi
+check_create_conf_ks_av1
+check_create_conf_ks_av1s
 check_create_conf_ks_mp3
 check_create_conf_ks_oga
 
@@ -715,6 +871,10 @@ while [ ${show_menu} -eq 0 ] ; do
   echo " s - Edit ks-mp4s config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
   source ${HOME}/.ks-tools/ks-avi
   echo " a - Edit ks-avi config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  source ${HOME}/.ks-tools/ks-av1
+  echo " v - Edit ks-av1 config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
+  source ${HOME}/.ks-tools/ks-av1s
+  echo " c - Edit ks-av1s config (${rel_size}/${vcodec}/${b_vcodec}/${acodec}/${b_acodec}/${default_lang_audio})"
   echo ""
   source ${HOME}/.ks-tools/ks-mp3
   echo " p - Edit ks-mp3/ks-mp3-album config (${acodec}/${b_acodec}/${default_lang_audio})"
@@ -737,6 +897,10 @@ while [ ${show_menu} -eq 0 ] ; do
     edit_video_config ks-mp4s
   elif [ "${option}" == "a" ] ; then
     edit_video_config ks-avi
+  elif [ "${option}" == "v" ] ; then
+    edit_video_config ks-av1
+  elif [ "${option}" == "c" ] ; then
+    edit_video_config ks-av1s
   elif [ "${option}" == "p" ] ; then
     edit_audio_config ks-mp3
   elif [ "${option}" == "o" ] ; then
