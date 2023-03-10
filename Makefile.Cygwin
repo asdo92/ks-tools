@@ -55,7 +55,7 @@ install:
 	chmod +x $(PREFIX)/bin/ks-vob-wrapper
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
-	cp -rf cygwin/bin/cygwin-alias.sh $(PREFIX)/bin
+	cp -rf cygwin/cygwin-alias.sh $(PREFIX)/bin
 	chmod +x $(PREFIX)/bin/cygwin-alias.sh
 
 uninstall:
@@ -84,5 +84,4 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-avi-wrapper
 	rm -rf $(PREFIX)/bin/ks-vob-wrapper
 	rm -rf $(PREFIX)/bin/cygwin-path
-	rm -rf $(PREFIX)/share/ks-tools
 	rm -rf $(PREFIX)/bin/cygwin-alias.sh
