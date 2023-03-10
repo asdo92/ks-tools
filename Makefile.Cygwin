@@ -23,6 +23,8 @@ install:
 	chmod +x $(PREFIX)/bin/ks-mp4s
 	cp -rf src/ks-mp4s-folder $(PREFIX)/bin/ks-mp4s-folder
 	chmod +x $(PREFIX)/bin/ks-mp4s-folder
+	cp -rf src/ks-av1s-folder $(PREFIX)/bin/ks-av1s-folder
+	chmod +x $(PREFIX)/bin/ks-av1s-folder
 	cp -rf src/ks-vob $(PREFIX)/bin/ks-vob
 	chmod +x $(PREFIX)/bin/ks-vob
 	cp -rf src/ks-av1 $(PREFIX)/bin/ks-av1
@@ -72,6 +74,7 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mp4k
 	rm -rf $(PREFIX)/bin/ks-mp4s
 	rm -rf $(PREFIX)/bin/ks-mp4s-folder
+	rm -rf $(PREFIX)/bin/ks-av1s-folder
 	rm -rf $(PREFIX)/bin/ks-vob
 	rm -rf $(PREFIX)/bin/ks-av1
 	rm -rf $(PREFIX)/bin/ks-av1s

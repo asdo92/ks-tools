@@ -23,6 +23,8 @@ install:
 	chmod +x $(PREFIX)/bin/ks-mp4s
 	cp -rf src/ks-mp4s-folder $(PREFIX)/bin/ks-mp4s-folder
 	chmod +x $(PREFIX)/bin/ks-mp4s-folder
+	cp -rf src/ks-av1s-folder $(PREFIX)/bin/ks-av1s-folder
+	chmod +x $(PREFIX)/bin/ks-av1s-folder
 	cp -rf src/ks-vob $(PREFIX)/bin/ks-vob
 	chmod +x $(PREFIX)/bin/ks-vob
 	cp -rf src/ks-av1 $(PREFIX)/bin/ks-av1
@@ -71,6 +73,7 @@ compile:
 	cp -rf src/ks-mp4k build
 	cp -rf src/ks-mp4s build
 	cp -rf src/ks-mp4s-folder build
+	cp -rf src/ks-av1s-folder build
 	cp -rf src/ks-oga build
 	cp -rf src/ks-oga-album build
 	cp -rf src/ks-upa build
@@ -97,6 +100,7 @@ compile:
 	shc -f build/ks-mp4k -o build/ks-mp4k.out
 	shc -f build/ks-mp4s -o build/ks-mp4s.out
 	shc -f build/ks-mp4s-folder -o build/ks-mp4s-folder.out
+	shc -f build/ks-av1s-folder -o build/ks-av1s-folder.out
 	shc -f build/ks-oga -o build/ks-oga.out
 	shc -f build/ks-oga-album -o build/ks-oga-album.out
 	shc -f build/ks-upa -o build/ks-upa.out
@@ -123,6 +127,7 @@ compile:
 	rm -rf build/ks-mp4k.out
 	rm -rf build/ks-mp4s.out
 	rm -rf build/ks-mp4s-folder.out
+	rm -rf build/ks-av1s-folder.out
 	rm -rf build/ks-oga.out
 	rm -rf build/ks-oga-album.out
 	rm -rf build/ks-upa.out
@@ -149,6 +154,7 @@ compile:
 	rm -rf build/ks-mp4k
 	rm -rf build/ks-mp4s
 	rm -rf build/ks-mp4s-folder
+	rm -rf build/ks-av1s-folder
 	rm -rf build/ks-oga
 	rm -rf build/ks-oga-album
 	rm -rf build/ks-upa
@@ -173,6 +179,7 @@ compile:
 	mv build/ks-mp4k.x.c build/ks-mp4k.c
 	mv build/ks-mp4s.x.c build/ks-mp4s.c
 	mv build/ks-mp4s-folder.x.c build/ks-mp4s-folder.c
+	mv build/ks-av1s-folder.x.c build/ks-av1s-folder.c
 	mv build/ks-oga.x.c build/ks-oga.c
 	mv build/ks-oga-album.x.c build/ks-oga-album.c
 	mv build/ks-upa.x.c build/ks-upa.c
@@ -201,6 +208,7 @@ compile:
 	gcc build/ks-mp4k-wrapper.c -o build/ks-mp4k-wrapper
 	gcc build/ks-mp4s.c -o build/ks-mp4s
 	gcc build/ks-mp4s-folder.c -o build/ks-mp4s-folder
+	gcc build/ks-av1s-folder.c -o build/ks-av1s-folder
 	gcc build/ks-mp4s-wrapper.c -o build/ks-mp4s-wrapper
 	gcc build/ks-mp4-wrapper.c -o build/ks-mp4-wrapper
 	gcc build/ks-oga-album.c -o build/ks-oga-album
@@ -236,6 +244,8 @@ compile-install:
 	chmod +x $(PREFIX)/bin/ks-mp4s
 	cp -rf build/ks-mp4s-folder $(PREFIX)/bin/ks-mp4s-folder
 	chmod +x $(PREFIX)/bin/ks-mp4s-folder
+	cp -rf build/ks-av1s-folder $(PREFIX)/bin/ks-av1s-folder
+	chmod +x $(PREFIX)/bin/ks-av1s-folder
 	cp -rf build/ks-vob $(PREFIX)/bin/ks-vob
 	chmod +x $(PREFIX)/bin/ks-vob
 	cp -rf build/ks-av1 $(PREFIX)/bin/ks-av1
@@ -283,6 +293,7 @@ compile-clean:
 	rm -rf build/ks-mp4k
 	rm -rf build/ks-mp4s
 	rm -rf build/ks-mp4s-folder
+	rm -rf build/ks-av1s-folder
 	rm -rf build/ks-oga
 	rm -rf build/ks-oga-album
 	rm -rf build/ks-upa
@@ -311,6 +322,7 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mp4k
 	rm -rf $(PREFIX)/bin/ks-mp4s
 	rm -rf $(PREFIX)/bin/ks-mp4s-folder
+	rm -rf $(PREFIX)/bin/ks-av1s-folder
 	rm -rf $(PREFIX)/bin/ks-vob
 	rm -rf $(PREFIX)/bin/ks-av1
 	rm -rf $(PREFIX)/bin/ks-av1s
