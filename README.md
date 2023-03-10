@@ -19,6 +19,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-vob](doc/ks-vob.md) - Convert video file to VOB (DVD splitet) format.
     * [ks-av1](doc/ks-av1.md) - Convert video file to compact and efficient AV1 codec (libsvtav1 + libvorbis).
     * [ks-av1s](doc/ks-av1s.md) - Convert video file to compact and efficient AV1 codec (Series).
+    * [ks-av1s-folder](doc/ks-av1s-folder.md) - Convert videos from folder to AV1 codec (Series).
   
   * `Tools for convert audio:`
 
@@ -39,6 +40,8 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-mp4s-wrapper](doc/ks-mp4s-wrapper.md) - Wrapper for ks-mp4s to create graphical interfaces.
     * [ks-avi-wrapper](doc/ks-avi-wrapper.md) - Wrapper for ks-avi to create graphical interfaces.
     * [ks-vob-wrapper](doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
+    * [ks-av1-wrapper](doc/ks-vob-wrapper.md) - Wrapper for ks-av1 to create graphical interfaces.
+    * [ks-av1s-wrapper](doc/ks-vob-wrapper.md) - Wrapper for ks-av1s to create graphical interfaces.
     * [ks-conf](doc/ks-conf.md) - Tool for create and modify all configuration files. 
 
 ### Installation:
