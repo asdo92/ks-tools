@@ -231,6 +231,8 @@ elif [ "${selected_codec}" == "libx265" ] ; then
   profile_codec=" -profile:v main "
 elif [ "${selected_codec}" == "libaom-av1" ] ; then
   profile_codec=" -profile:v main "
+elif [ "${selected_codec}" == "libsvtav1" ] ; then
+  profile_codec=" -profile:v main "
 else
   profile_codec=" "
 fi
