@@ -47,108 +47,80 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies **(for Arch Linux)**:
     
-      ```shell
-      $ sudo pacman -Syu git make expect rsync openssh sshpass grep coreutils binutils
-      ````
-      
+          sudo pacman -Syu git make expect rsync openssh sshpass grep coreutils binutils
+
     * Install dependencies **(for Ubuntu/Debian)**:
     
-      ```shell
-      $ sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils
-      ````
+          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils
       
     * Install dependencies **(for Fedora)**:
     
-      ```shell
-      $ sudo dnf install git make expect rsync openssh sshpass grep coreutils binutils
-      ````
-      
+          sudo dnf install git make expect rsync openssh sshpass grep coreutils binutils
+
     * Install `ffmpeg` from repository or use the package [ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy):
     
-      ```shell
-      $ sudo tar jxvf ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2 -C /
-      ````
+          sudo tar jxvf ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2 -C /
       
     * Install ks-tools cloning the repository:
     
-      ```shell
-      $ git clone https://gitlab.com/q3aql/ks-tools
-      $ cd ks-tools
-      $ make install
-      ````
+          git clone https://gitlab.com/q3aql/ks-tools
+          cd ks-tools
+          make install
 
   * **Windows ([Cygwin](https://www.cygwin.com/)):**
   
     * Install dependencies:
     
-      ```shell
-      $ lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
-      $ install apt-cyg /bin
-      $ apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils
-      ````
+          lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
+          install apt-cyg /bin
+          apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils
       
     * Download package [ffmpeg-6.0-cygwin-64bit-build2.tar.gz](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy) and install it:
     
-      ```shell
-      $ tar zxvf ffmpeg-6.0-cygwin-64bit-build2.tar.gz -C /
-      ````
-      
+          tar zxvf ffmpeg-6.0-cygwin-64bit-build2.tar.gz -C /
+
     * If you prefer your own ffmpeg build, use this script for build it:
-    
-      ```shell
-      $ git clone https://gitlab.com/q3aql/ks-tools
-      $ cd ks-tools/cygwin
-      $ chmod +x ffmpeg-build-cygwin64.sh
-      $ ./ffmpeg-build-cygwin64.sh
-      ````
-      
+
+          git clone https://gitlab.com/q3aql/ks-tools
+          cd ks-tools/cygwin
+          chmod +x ffmpeg-build-cygwin64.sh
+          ./ffmpeg-build-cygwin64.sh
+  
     * Install ks-tools cloning the repository:
 
-      ```shell
-      $ git clone https://gitlab.com/q3aql/ks-tools
-      $ cd ks-tools
-      $ make -f Makefile.Cygwin
-      ````
+          git clone https://gitlab.com/q3aql/ks-tools
+          cd ks-tools
+          make -f Makefile.Cygwin
       
   * **Windows ([WSL](https://learn.microsoft.com/en-us/windows/wsl/install)):**
   
     * Install dependencies:
     
-      ```shell
-      $ sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils
-      ````
+          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils
       
     * Install `ffmpeg` from the package [ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy) or from repository:
     
-      ```shell
-      $ sudo apt install ffmpeg
-      ````
-      
+          sudo apt install ffmpeg
+
     * Install ks-tools cloning the repository:
     
-      ```shell
-      $ git clone https://gitlab.com/q3aql/ks-tools
-      $ cd ks-tools
-      $ make install
-      ````
+          git clone https://gitlab.com/q3aql/ks-tools
+          cd ks-tools
+          make install
       
   * **MacOS ([HomeBrew](https://brew.sh/)):**
   
     * Install dependencies:
     
-      ```shell
-      $ brew install git make expect rsync openssh grep binutils ffmpeg
-      $ curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
-      $ brew install sshpass.rb 
-      ````
+          brew install git make expect rsync openssh grep binutils ffmpeg
+          curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
+          brew install sshpass.rb 
       
     * Install ks-tools cloning the repository:
     
-      ```shell
-      $ git clone https://gitlab.com/q3aql/ks-tools
-      $ cd ks-tools
-      $ make install
-      ````
+          git clone https://gitlab.com/q3aql/ks-tools
+          cd ks-tools
+          make install
 
 ### External links:
 
