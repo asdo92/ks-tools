@@ -2,18 +2,21 @@
 
 ###############################################################
 # ks-mp4k-wrapper (ks-tools) - Wrapper for ks-mp4k            #
-# Date: 04-02-2022                                            #
+# Date: 10-03-2023                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
 VERSION="8.4-dev"
-M_DATE="040222"
+M_DATE="100323"
 
 # Conversion parameters
 ks_mp4k_to_wrap="/usr/bin/ks-mp4k"
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
 rel_size="3840x2160"
+configFolder=${HOME}/.ks-tools 
+configFile=${configFolder}/ks-mp4k
+source ${configFile}
 
 # Global parameters
 dirTemp="/tmp"
