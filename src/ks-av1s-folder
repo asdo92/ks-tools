@@ -133,7 +133,7 @@ else
     convert_files=$(expr ${convert_files} + 1)
   done
   echo ""
-  echo "* The output folder will be '${1}/to-mp4'"
+  echo "* The output folder will be '${1}/to-av1'"
   # Execute commands for conversion
   echo ""
   echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
@@ -141,15 +141,15 @@ else
     exit
   else
     convert_files=1
-    cd "${1}" && mkdir -p to-mp4 && rm -rf to-mp4/*
+    cd "${1}" && mkdir -p to-av1 && rm -rf to-av1/*
     while [ ${convert_files} -le ${num_files} ] ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
       if [ ${subtitles_enabled} -eq 1 ] ; then
         fname=$(echo "${show_file}" | cut -d "." -f 1)
-        ks-av1s-wrapper --conv-with-sub "${show_file}" "to-mp4/${fname}"
+        ks-av1s-wrapper --conv-with-sub "${show_file}" "to-av1/${fname}"
       else
         fname=$(echo "${show_file}" | cut -d "." -f 1)
-        ks-av1s-wrapper --conv "${show_file}" "to-mp4/${fname}"
+        ks-av1s-wrapper --conv "${show_file}" "to-av1/${fname}"
       fi
       convert_files=$(expr ${convert_files} + 1)
     done
