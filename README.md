@@ -68,7 +68,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           git clone https://gitlab.com/q3aql/ks-tools
           cd ks-tools
-          make install
+          sudo make install
 
   * **Windows ([Cygwin](https://www.cygwin.com/)):**
   
@@ -109,7 +109,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           git clone https://gitlab.com/q3aql/ks-tools
           cd ks-tools
-          make install
+          sudo make install
       
   * **MacOS ([HomeBrew](https://brew.sh/)):**
   
@@ -123,7 +123,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           git clone https://gitlab.com/q3aql/ks-tools
           cd ks-tools
-          make install
+          sudo make install
 
 ### External links:
 
