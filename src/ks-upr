@@ -2,12 +2,12 @@
 
 ##############################################################################
 # ks-upr (ks-tools) - Upload recursively file(s) to server with scp or rsync #
-# Date: 13-02-2023                                                           #
+# Date: 11-03-2023                                                           #
 # Author: q3aql                                                              #
 # Contact: q3aql@duck.com                                                    #
 ##############################################################################
 VERSION="8.4-dev"
-M_DATE="130223"
+M_DATE="110323"
 
 # Global parameters.
 dirTemp="/tmp"
@@ -301,6 +301,32 @@ function decrypt_kstools() {
   echo ${pass_decrypt}
 }
 
+# Function to generate certificate on remote machine
+function gen_pem_ssh() {
+  userhost="${USER}"
+  name_host="${HOSTNAME}"
+  echo "" && echo "* Generating .pem file to connect to this machine (${userhost})."
+  ssh-keygen << EOF
+  ${userhost}
+EOF
+  mv ${userhost} ${userhost}-${name_host}.pem
+  mkdir -p ~/.ssh
+  chmod 700 ~/.ssh
+  touch ~/.ssh/authorized_keys
+  chmod 600  ~/.ssh/authorized_keys
+  echo "* Adding entry in the file ~/.ssh/authorized_keys"
+  cat ${userhost}.pub >> ~/.ssh/authorized_keys
+  rm -rf ${userhost}.pub
+  echo ""
+  echo "+ Copy the ${userhost}-${name_host}.pem file to your computer to connect to this machine."
+  if [ -f /usr/bin/puttygen ] ; then
+    puttygen ${userhost}-${name_host}.pem -o ${userhost}-${name_host}.ppk -O private
+    echo "+ Copy the ${userhost}-${name_host}.ppk file to your computer to connect to this machine."
+  fi
+  echo "+ Connect: ssh -i ${userhost}-${name_host}.pem ${userhost}@${name_host}"
+  echo ""
+}
+
 # Function to show config
 function showConfig() {
   configAvailable=0
@@ -553,6 +579,7 @@ function showHelp() {
   echo " $ ks-upr -r  - Remove configuration"
   echo " $ ks-upr -c  - Show configuration"
   echo " $ ks-upr -e  - Edit configuration"
+  echo " $ ks-upv -p  - Generate certificate"
   echo " $ ks-upr -v  - Show version"
   echo " $ ks-upr -h  - Show help"
   echo ""
@@ -664,15 +691,18 @@ if [ "${1}" == "-r" ] ; then
     exit
   fi
 fi
-# Show configuration file
+  # Show configuration file
 if [ "${1}" == "-c" ] ; then
   showConfig
-  # Show configuration file
+  # Edit configuration file
 elif [ "${1}" == "-e" ] ; then
   editConfig
   # Show the version
 elif [ "${1}" == "-v" ] ; then
   showVersion
+  # Generate certificate
+elif [ "${1}" == "-p" ] ; then
+  gen_pem_ssh
   # Show the help
 elif [ "${1}" == "-h" ] ; then
   showHelp
