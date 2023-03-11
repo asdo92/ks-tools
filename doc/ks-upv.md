@@ -9,6 +9,7 @@ $ ks-upv -g  - Create configuration
 $ ks-upv -r  - Remove configuration
 $ ks-upv -c  - Show configuration
 $ ks-upv -e  - Edit configuration
+$ ks-upv -p  - Generate certificate
 $ ks-upv -v  - Show version
 $ ks-upv -h  - Show help
 ```
@@ -25,10 +26,12 @@ $ ks-upv -h  - Show help
 
     ```shell
     * Enter the server user: anonymous
-    * Enter the server key: *******
+    * Enter the server password (type 'pem' for use pem certificate): *******
     * Enter the server URL: mypersonaldomain.es
     * Enter the path on the server: /home/anonymous
     * Enter the local path to scan: /home/local/videos
+    * Setting 'scp' as the default tool
+    * Setting port 22 as the default port
     ````
 
   * Once the connection data has been entered, the local directory will be scanned to detect the videos and upload them to the server directory.
@@ -53,7 +56,7 @@ $ ks-upv -h  - Show help
 
     ```shell
     * Server User: anonymous
-    * Server Password: *******
+    * Server Password/PEM: *******
     * URL (or IP) Server: mypersonaldomain.es
     * Destination Path (Server): /home/anonymous
     * Scan Path (Local): /home/local/videos
@@ -73,7 +76,7 @@ $ ks-upv -h  - Show help
 
     ```shell
     1 - Edit User (anonymous)
-    2 - Edit Password (*******)
+    2 - Edit Password/PEM (*******)
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
@@ -84,6 +87,16 @@ $ ks-upv -h  - Show help
 
     * Choose an option: 
     ````
+    
+### Generate certificate (on remote machine):
+
+  * To generate certificate for connect to remote machine, run the following command:
+
+    ```shell
+    $ ks-upv -p
+    ````
+    
+  * Copy the file [user]-[hostname].pem to your machine.
     
 ### Show version:
 

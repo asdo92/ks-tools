@@ -505,7 +505,7 @@ function showConfig() {
       showPassword="${showPassword}*"
       totalchars=$(expr ${totalchars} + 1)
     done
-    echo "- Server Password: ${showPassword}"
+    echo "- Server Password/PEM: ${showPassword}"
     configAvailable=1
   fi
   if [ -f ${dirConfig}/ks-upload-server ] ; then

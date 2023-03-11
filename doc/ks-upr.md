@@ -9,6 +9,7 @@ $ ks-upr -g  - Create configuration
 $ ks-upr -r  - Remove configuration
 $ ks-upr -c  - Show configuration
 $ ks-upr -e  - Edit configuration
+$ ks-upr -p  - Generate certificate
 $ ks-upr -v  - Show version
 $ ks-upr -h  - Show help
 ```
@@ -25,10 +26,12 @@ $ ks-upr -h  - Show help
 
     ```shell
     * Enter the server user: anonymous
-    * Enter the server key: *******
+    * Enter the server password (type 'pem' for use pem certificate): *******
     * Enter the server URL: mypersonaldomain.es
     * Enter the path on the server: /home/anonymous
     * Enter the local path to scan: /home/local/videos
+    * Setting 'scp' as the default tool
+    * Setting port 22 as the default port
     ````
 
   * Once the connection data has been entered, the local directory will be scanned to upload recursively them to the server directory.
@@ -53,7 +56,7 @@ $ ks-upr -h  - Show help
 
     ```shell
     * Server User: anonymous
-    * Server Password: *******
+    * Server Password/PEM: *******
     * URL (or IP) Server: mypersonaldomain.es
     * Destination Path (Server): /home/anonymous
     * Scan Path (Local): /home/local/videos
@@ -73,18 +76,28 @@ $ ks-upr -h  - Show help
 
     ```shell
     1 - Edit User (anonymous)
-    2 - Edit Password (*******)
+    2 - Edit Password/PEM (*******)
     3 - Edit Server (mypersonaldomain.es)
     4 - Edit Dest. Path (/home/anonymous)
     5 - Edit Local Path (/home/local/videos)
     6 - Edit Upload Tool (scp)
-    7 - Edit Port Connection (22)
+    7 - Edit Port Connection (22))
 
     8 - Exit
 
     * Choose an option: 
     ````
+
+### Generate certificate (on remote machine):
+
+  * To generate certificate for connect to remote machine, run the following command:
+
+    ```shell
+    $ ks-upr -p
+    ````
     
+  * Copy the file [user]-[hostname].pem to your machine.
+
 ### Show version:
 
   * You can check the version with the command:

@@ -364,7 +364,7 @@ function showConfig() {
       showPassword="${showPassword}*"
       totalchars=$(expr ${totalchars} + 1)
     done
-    echo "- Server Password: ${showPassword}"
+    echo "- Server Password/PEM: ${showPassword}"
     configAvailable=1
   fi
   if [ -f ${dirConfig}/ks-upload-server ] ; then
@@ -420,7 +420,7 @@ function editConfig() {
     editUpvTool=$(cat ${dirConfig}/ks-upload-tool 2> /dev/null)
     editUpvPort=$(cat ${dirConfig}/ks-upload-port 2> /dev/null)
     echo ""
-    echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+    echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
     echo "+ Config: ${dirConfig}/ks-upload-*"
     echo ""
@@ -530,12 +530,12 @@ function createConfig() {
 # Start script
   clear
   echo ""
-  echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+  echo "* ks-upr (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
   checkDependencies
   # Ask the user and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-user ] ; then
-    echo "+ The USER configuration already exists (Use: 'ks-upv -e' for edit)"
+    echo "+ The USER configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo -n "* Enter the server user: " ; read USER
     user=${USER}
@@ -543,7 +543,7 @@ function createConfig() {
   fi
   # Ask the password and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-pass ] ; then
-    echo "+ The PASSWORD/PEM configuration already exists (Use: 'ks-upv -e' for edit)" 
+    echo "+ The PASSWORD/PEM configuration already exists (Use: 'ks-upr -e' for edit)" 
   else
     echo -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
     if [ "${PASS}" == "pem" ] ; then
@@ -565,7 +565,7 @@ function createConfig() {
   fi
   # Ask the server URL and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-server ] ; then
-    echo "+ The SERVER configuration already exists (Use: 'ks-upv -e' for edit)"
+    echo "+ The SERVER configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo -n "* Enter the server URL: " ; read SERVER
     server=${SERVER}
@@ -573,7 +573,7 @@ function createConfig() {
   fi
   # Ask the path on the server and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-dirserver ] ; then
-    echo "+ The SERVER PATH configuration already exists (Use: 'ks-upv -e' for edit)"
+    echo "+ The SERVER PATH configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo -n "* Enter the path on the server: " ; read DIR_SERVER
     dirServer=${DIR_SERVER}
@@ -581,7 +581,7 @@ function createConfig() {
   fi
   # Ask the local path and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-dirlocal ] ; then
-    echo "+ The LOCAL PATH configuration already exists (Use: 'ks-upv -e' for edit)"
+    echo "+ The LOCAL PATH configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo -n "* Enter the local path to scan: " ; read DIR
     dirLocal=${DIR}
@@ -589,14 +589,14 @@ function createConfig() {
   fi
   # Configure upload tool by default
   if [ -f ${dirConfig}/ks-upload-tool ] ; then
-    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upv -e' for edit)"
+    echo "+ The UPLOAD TOOL configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo "* Setting 'scp' as the default tool"
     echo "scp" > ${dirConfig}/ks-upload-tool
   fi
    # Configure port by default
   if [ -f ${dirConfig}/ks-upload-port ] ; then
-    echo "+ The PORT configuration already exists (Use: 'ks-upv -e' for edit)"
+    echo "+ The PORT configuration already exists (Use: 'ks-upr -e' for edit)"
   else
     echo "* Setting port 22 as the default port"
     echo "22" > ${dirConfig}/ks-upload-port
@@ -628,7 +628,7 @@ function showHelp() {
   echo " $ ks-upr -r  - Remove configuration"
   echo " $ ks-upr -c  - Show configuration"
   echo " $ ks-upr -e  - Edit configuration"
-  echo " $ ks-upv -p  - Generate certificate"
+  echo " $ ks-upr -p  - Generate certificate"
   echo " $ ks-upr -v  - Show version"
   echo " $ ks-upr -h  - Show help"
   echo ""
