@@ -191,6 +191,13 @@ EOF
       elif [ "${toolSelected}" == "scp-rsa" ] ; then
         /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
+      elif [ "${toolSelected}" == "rsync-pem" ] ; then
+        /usr/bin/rsync --progress -azL --rsh="/usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
+        /usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "scp-pem" ] ; then
+        /usr/bin/scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
+        OUTPUT=$?
       else
         /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
@@ -248,6 +255,13 @@ EOF
       elif [ "${toolSelected}" == "scp-rsa" ] ; then
         sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
+      elif [ "${toolSelected}" == "rsync-pem" ] ; then
+        rsync --progress -azL --rsh="ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} -l ${3}" ${2} ${4}:${5} 2> /dev/null
+        ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} rm -rf ${5}/.${6}.* &> /dev/null
+        OUTPUT=$?
+      elif [ "${toolSelected}" == "scp-pem" ] ; then
+        scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
+        OUTPUT=$?
       else
         sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} ${2} ${3}@${4}:${5} 2> /dev/null
         OUTPUT=$?
@@ -280,9 +294,19 @@ function checkChecksum() {
   while [ ${correct} -eq 0 ] ; do
     if [ "${cygwin}" == "yes" ] ; then
       if [ -z "${toolSelected}" ] ; then
-        checksumLocal=$(/usr/bin/md5sum ${2})
-        checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
-        OUTPUT=$?
+        if [ "${selectedTool}" == "rsync-pem" ] ; then
+          checksumLocal=$(/usr/bin/md5sum ${2})
+          checksumServer=$(/usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+          OUTPUT=$?
+        elif [ "${selectedTool}" == "scp-pem" ] ; then
+          checksumLocal=$(md5sum ${2})
+          checksumServer=$(/usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+          OUTPUT=$?
+        else
+          checksumLocal=$(/usr/bin/md5sum ${2})
+          checksumServer=$(/usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+          OUTPUT=$?
+        fi
       elif [ "${selectedTool}" == "rsync-e" ] ; then
         echo > /dev/null
         OUTPUT=0
@@ -296,13 +320,25 @@ function checkChecksum() {
       fi
     else
       if [ -z "${toolSelected}" ] ; then
-        checksumLocal=$(md5sum ${2})
-        checksumServer=$(sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
-        OUTPUT=$?
+        if [ "${selectedTool}" == "rsync-pem" ] ; then
+          checksumLocal=$(md5sum ${2})
+          checksumServer=$(ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+          OUTPUT=$?
+        elif [ "${selectedTool}" == "scp-pem" ] ; then
+          checksumLocal=$(md5sum ${2})
+          checksumServer=$(ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+          OUTPUT=$?
+        else
+          checksumLocal=$(md5sum ${2})
+          checksumServer=$(sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
+          OUTPUT=$?
+        fi
       elif [ "${selectedTool}" == "rsync-e" ] ; then
         echo > /dev/null
+        OUTPUT=0
       elif [ "${selectedTool}" == "scp-e" ] ; then
         echo > /dev/null
+        OUTPUT=0
       else
         checksumLocal=$(md5sum ${2})
         checksumServer=$(sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} md5sum ${5} 2> /dev/null)
@@ -498,12 +534,12 @@ function editConfig() {
     editUpvTool=$(cat ${dirConfig}/ks-upload-tool 2> /dev/null)
     editUpvPort=$(cat ${dirConfig}/ks-upload-port 2> /dev/null)
     echo ""
-    echo "* ks-upv (ks-tools) v${VERSION} (${M_DATE})"
+    echo "* ks-upa (ks-tools) v${VERSION} (${M_DATE})"
     echo ""
     echo "+ Config: ${dirConfig}/ks-upload-*"
     echo ""
     echo " 1 - Edit User (${editUser})"
-    echo " 2 - Edit Password (${editPassword})"
+    echo " 2 - Edit Password/PEM (${editPassword})"
     echo " 3 - Edit Server (${editServer})"
     echo " 4 - Edit Dest. Path (${editDirServer})"
     echo " 5 - Edit Local Path (${editDirLocal})"
@@ -519,10 +555,23 @@ function editConfig() {
       user=${USER}
       echo ${user} > ${dirConfig}/ks-upload-user
     elif [ "${EDIT}" == "2" ] ; then
-      echo -n "* Enter the server password: " ; read PASS
-      raw_password_enter=${PASS}
-      encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-      echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+      echo -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
+      if [ "${PASS}" == "pem" ] ; then
+        echo -n "+ Type the absolute path to the .pem file: " ; read pem_path
+      if [ -f "${pem_path}" ] ; then
+        raw_password_enter=${PASS}
+        encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+        echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+        cp -rf "${pem_path}" ${dirConfig}/connect.pem
+        echo "* PEM file copied to ${dirConfig}/connect.pem"
+      else
+        echo "+ File ${pem_path} does not exist"
+      fi
+      else
+        raw_password_enter=${PASS}
+        encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+        echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+      fi
     elif [ "${EDIT}" == "3" ] ; then
       echo -n "* Enter the server URL: " ; read SERVER
       server=${SERVER}
@@ -545,10 +594,13 @@ function editConfig() {
       echo "- rsync-rsa (legacy RSA algorithm)"
       echo "- scp-e"
       echo "- rsync-e"
+      echo "- scp-pem"
+      echo "- rsync-pem"
       echo ""
       echo "* Note: 'scp-e' and 'rsync-e' use 'expect' instead of 'sshpass'."
+      echo "* Note: 'scp-pem' and 'rsync-pem' use ~/.ks-tools/connect.pem."
       echo "" 
-      echo -n "* [Default: scp] Type upload tool (scp/rsync/scp-rsa/rsync-rsa/scp-e/rsync-e): " ; read TOOL
+      echo -n "* [Default: scp] Type upload tool (Example: rsync-e): " ; read TOOL
       if [ -z "${TOOL}" ] ; then
         upvTool="scp"
       elif [ "${TOOL}" == "rsync" ] ; then
@@ -561,6 +613,10 @@ function editConfig() {
         upvTool="scp-e"
       elif [ "${TOOL}" == "rsync-e" ] ; then
         upvTool="rsync-e"
+      elif [ "${TOOL}" == "scp-pem" ] ; then
+        upvTool="scp-pem"
+      elif [ "${TOOL}" == "rsync-pem" ] ; then
+        upvTool="rsync-pem"
       else  
         upvTool="scp"
       fi
@@ -601,12 +657,25 @@ function createConfig() {
   fi
   # Ask the password and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-pass ] ; then
-    echo "+ The PASSWORD configuration already exists (Use: 'ks-upa -e' for edit)" 
+    echo "+ The PASSWORD/PEM configuration already exists (Use: 'ks-upa -e' for edit)" 
   else
-    echo -n "* Enter the server password: " ; read PASS
-    raw_password_enter=${PASS}
-    encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
-    echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+    echo -n "* Enter the server password (type 'pem' for use pem certificate): " ; read PASS
+    if [ "${PASS}" == "pem" ] ; then
+      echo -n "+ Type the absolute path to the .pem file: " ; read pem_path
+      if [ -f "${pem_path}" ] ; then
+        raw_password_enter=${PASS}
+        encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+        echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+        cp -rf "${pem_path}" ${dirConfig}/connect.pem
+        echo "* PEM file copied to ${dirConfig}/connect.pem"
+      else
+        echo "+ File ${pem_path} does not exist"
+      fi
+    else
+      raw_password_enter=${PASS}
+      encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
+      echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
+    fi
   fi
   # Ask the server URL and if it exists, read it from the config.
   if [ -f ${dirConfig}/ks-upload-server ] ; then
@@ -673,7 +742,7 @@ function showHelp() {
   echo " $ ks-upa -r  - Remove configuration"
   echo " $ ks-upa -c  - Show configuration"
   echo " $ ks-upa -e  - Edit configuration"
-  echo " $ ks-upv -p  - Generate certificate"
+  echo " $ ks-upa -p  - Generate certificate"
   echo " $ ks-upa -v  - Show version"
   echo " $ ks-upa -h  - Show help"
   echo ""
@@ -684,7 +753,7 @@ function showHelp() {
 # for the execution are installed.
 function checkDependencies() {
   path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
-  dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan"
+  dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen"
   dependencies_found=""
   dependencies_not_found=""
   for checkPath in ${path_check} ; do
@@ -765,8 +834,9 @@ if [ "${1}" == "-r" ] ; then
     echo ""
     echo "+ Removing USER file configuration..."
     rm -rf ${dirConfig}/ks-upload-user
-    echo "+ Removing PASSWORD file configuration..."
+    echo "+ Removing PASSWORD/PEM file configuration..."
     rm -rf ${dirConfig}/ks-upload-pass
+    rm -rf ${dirConfig}/connect.pem
     echo "+ Removing SERVER file configuration..."
     rm -rf ${dirConfig}/ks-upload-server
     echo "+ Removing SERVER PATH file configuration..."
@@ -785,7 +855,7 @@ if [ "${1}" == "-r" ] ; then
     exit
   fi
 fi
-  # Show configuration file
+# Show configuration file
 if [ "${1}" == "-c" ] ; then
   showConfig
   # Edit configuration file
@@ -800,6 +870,7 @@ elif [ "${1}" == "-p" ] ; then
   # Show the help
 elif [ "${1}" == "-h" ] ; then
   showHelp
+  # Create config
 elif [ "${1}" == "-g" ] ; then
   createConfig
   # Init
@@ -819,7 +890,7 @@ elif [ "${1}" == "-i" ] ; then
     listArchives "${dirLocal}"
     totalFiles=$(countArchives)
     count=1
-    echo "+ ${totalFiles} audio file(s) found!"
+    echo "+ ${totalFiles} video file(s) found!"
     echo ""
     current_tool=$(cat ${dirConfig}/ks-upload-tool)
     if [ "${current_tool}" == "scp" ] ; then
