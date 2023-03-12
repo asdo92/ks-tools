@@ -449,6 +449,7 @@ function editConfig() {
         encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
         echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
         cp -rf "${pem_path}" ${dirConfig}/connect.pem
+        chmod 600 ${dirConfig}/connect.pem
         echo "* PEM file copied to ${dirConfig}/connect.pem"
       else
         echo "+ File ${pem_path} does not exist"
@@ -553,6 +554,7 @@ function createConfig() {
         encrypt_password_enter=$(encrypt_kstools "${raw_password_enter}")
         echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
         cp -rf "${pem_path}" ${dirConfig}/connect.pem
+        chmod 600 ${dirConfig}/connect.pem
         echo "* PEM file copied to ${dirConfig}/connect.pem"
       else
         echo "+ File ${pem_path} does not exist"
