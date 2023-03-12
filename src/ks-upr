@@ -455,9 +455,20 @@ function editConfig() {
         echo ${encrypt_password_enter} > ${dirConfig}/ks-upload-pass
         cp -rf "${pem_path}" ${dirConfig}/connect.pem
         chmod 600 ${dirConfig}/connect.pem
+        if [ "${editUpvTool}" == "rsync" ] ; then
+          echo "rsync-pem" > ${dirConfig}/ks-upload-tool
+        elif [ "${editUpvTool}" == "rsync-rsa" ] ; then
+          echo "rsync-pem" > ${dirConfig}/ks-upload-tool
+        elif [ "${editUpvTool}" == "scp" ] ; then
+          echo "scp-pem" > ${dirConfig}/ks-upload-tool
+        elif [ "${editUpvTool}" == "scp-rsa" ] ; then
+          echo "scp-pem" > ${dirConfig}/ks-upload-tool
+        fi
         echo "* PEM file copied to ${dirConfig}/connect.pem"
       else
         echo "+ File ${pem_path} does not exist"
+        echo ""
+        echo "+ Press ENTER to return menu " ; read continue
       fi
       else
         raw_password_enter=${PASS}
