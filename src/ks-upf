@@ -704,6 +704,8 @@ function createConfig() {
         echo "* PEM file copied to ${dirConfig}/connect.pem"
       else
         echo "+ File ${pem_path} does not exist"
+        echo "+ The configuration is cancelled"
+        exit
       fi
     else
       raw_password_enter=${PASS}
