@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4-wrapper (ks-tools) - Wrapper for ks-mp4              #
-# Date: 10-03-2023                                            #
+# Date: 12-03-2023                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
 VERSION="8.5-dev"
-M_DATE="100323"
+M_DATE="120323"
 
 # Conversion parameters
 ks_mp4_to_wrap="/usr/bin/ks-mp4"
@@ -129,7 +129,7 @@ function showInfo() {
 # Syntax: showVideoDefault <video_file>
 function showVideoDefault() {
   # Check de video track by default
-  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  video_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [ -z "${video_default}" ] ; then
     video_default="0:0"
   else
@@ -147,9 +147,9 @@ function showVideoDefault() {
 # Syntax: showAudioDefault <video_file>
 function showAudioDefault() {
   # Check the audio track by default
-  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [ -z "${audio_default}" ] ; then
-    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+    audio_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
     if [ -z "${audio_default}" ] ; then
       audio_default="0:1"
     else
@@ -175,11 +175,11 @@ function showAudioDefault() {
 # Syntax: showSubtitleDefault <video_file>
 function showSubtitleDefault() {
   # Check the subtitle track by default
-  subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+  subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | grep "(forced)" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
   if [ -z "${subtitle_default}" ] ; then
-    subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+    subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | grep "(${default_lang_subt})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
     if [ -z "${subtitle_default}" ] ; then
-      subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | head -1)
+      subtitle_default=$(${p_ffmpeg} "${1}" 2>&1 | grep Stream | tr -s " " | grep "Subtitle:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
       if [ -z "${subtitle_default}" ] ; then
         subtitle_default="0:3"
       else
