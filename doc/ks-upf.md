@@ -27,7 +27,7 @@ $ ks-upf -h  - Show help
     ```shell
     * Enter the server user: anonymous
     * Enter the server password (type 'pem' for use pem certificate): *******
-    * Enter the server URL: mypersonaldomain.es
+    * Enter the server URL (or IP): mypersonaldomain.es
     * Enter the path on the server: /home/anonymous
     * Enter the local path to scan: /home/local/videos
     * Setting 'scp' as the default tool
