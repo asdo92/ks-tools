@@ -2,7 +2,7 @@
 
 ##############################################################################
 # ks-upr (ks-tools) - Upload recursively file(s) to server with scp or rsync #
-# Date: 12-03-2023                                                           #
+# Date: 13-03-2023                                                           #
 # Author: q3aql                                                              #
 # Contact: q3aql@duck.com                                                    #
 ##############################################################################
@@ -256,6 +256,89 @@ EOF
       echo ""
       echo "+ Sending files from ${2} to ${5} (${4})"
       sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} -r ${2}/* ${3}@${4}:${5}/ 2> /dev/null
+    fi
+  fi
+}
+
+# Function for recursive checksum.
+# # Syntax: recursive_checksum <password> <file path> <user> <server> <server path>
+function recursive_checksum() {
+  toolSelected=$(cat ${dirConfig}/ks-upload-tool)
+  portSelected=$(cat ${dirConfig}/ks-upload-port)
+  echo "# Generating checksum for files on ${dirLocal} directory"
+  cd ${2}
+  find . -type f -exec md5sum {} > /tmp/ks-tools_checksum.md5 \;
+  if [ "${cygwin}" == "yes" ] ; then
+    if [ "${toolSelected}" == "rsync" ] ; then
+      echo "# Copying checksum file to ${4}"
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "scp" ] ; then
+      echo "# Copying checksum file to ${4}"
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "rsync-rsa" ] ; then
+      echo "# Copying checksum file to ${4}"
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "scp-rsa" ] ; then
+      echo "# Copying checksum file to ${4}"
+      /usr/bin/sshpass -p ${1} /usr/bin/scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      /usr/bin/sshpass -p ${1} /usr/bin/ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "rsync-pem" ] ; then
+      echo "# Copying checksum file to ${4}"
+      /usr/bin/scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      /usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "scp-pem" ] ; then
+      echo "# Copying checksum file to ${4}"
+      /usr/bin/scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      /usr/bin/ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "rsync-e" ] ; then
+      echo "# Cancelled checksum por rsync-e"
+    elif [ "${toolSelected}" == "scp-pem" ] ; then
+      echo "# Cancelled checksum for scp-e"
+    fi
+  else
+    if [ "${toolSelected}" == "rsync" ] ; then
+      echo "# Copying checksum file to ${4}"
+      sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "scp" ] ; then
+      echo "# Copying checksum file to ${4}"
+      sshpass -p ${1} scp -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      sshpass -p ${1} ssh -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "rsync-rsa" ] ; then
+      echo "# Copying checksum file to ${4}"
+      sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "scp-rsa" ] ; then
+      echo "# Copying checksum file to ${4}"
+      sshpass -p ${1} scp -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      sshpass -p ${1} ssh -o HostKeyAlgorithms=+ssh-rsa -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "rsync-pem" ] ; then
+      echo "# Copying checksum file to ${4}"
+      scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "scp-pem" ] ; then
+      echo "# Copying checksum file to ${4}"
+      scp -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -P ${portSelected} /tmp/ks-tools_checksum.md5 ${3}@${4}:${5}/ &> /dev/null
+      echo "# Running checksum test"
+      ssh -i ${dirConfig}/connect.pem -o StrictHostKeyChecking=no -o CheckHostIP=no -p ${portSelected} ${3}@${4} "cd ${5} && md5sum -c ks-tools_checksum.md5 && rm -rf ks-tools_checksum.md5" 2> /dev/null
+    elif [ "${toolSelected}" == "rsync-e" ] ; then
+      echo "# Cancelled checksum por rsync-e"
+    elif [ "${toolSelected}" == "scp-pem" ] ; then
+      echo "# Cancelled checksum for scp-e"
     fi
   fi
 }
@@ -816,6 +899,7 @@ elif [ "${1}" == "-i" ] ; then
   if [ -d ${dirLocal} ] ; then
     sendFile ${password} "${dirLocal}" ${user} ${server} ${dirServer}
     echo ""
+    recursive_checksum ${password} "${dirLocal}" ${user} ${server} ${dirServer}
     count=$(expr ${count} + 1)
   else
     echo "* Directory ${dirLocal} does not exist!"
