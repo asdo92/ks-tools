@@ -113,7 +113,7 @@ done
 num_files=$(cat ${tempFile} | wc -l)
 if [ ${num_files} -eq 0 ] ; then
   echo ""
-  echo "+ No video file(s) found in folder '${1}"
+  echo "+ No video file(s) found in folder '${1}'"
   echo ""
   exit
 else
