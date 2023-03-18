@@ -2,7 +2,7 @@
 
 #######################################################################
 # ks-conf (ks-tools) - Tool for create and modify configuration files #
-# Date: 10-03-2023                                                    #
+# Date: 18-03-2023                                                    #
 # Author: q3aql                                                       #
 # Contact: q3aql@duck.com                                             #
 #######################################################################
@@ -754,6 +754,8 @@ edit_video_config() {
       check_create_conf_ks_mp4s
       check_create_conf_ks_mp4k
       check_create_conf_ks_avi
+      check_create_conf_ks_av1
+      check_create_conf_ks_av1s
     elif [ "${option}" == "q" ] ; then
       editing=1
     else
