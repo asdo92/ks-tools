@@ -21,10 +21,10 @@ function check_create_conf_ks_mp4() {
   configFile=${configFolder}/ks-mp4
   rel_size="1280x534"
   vcodec="libx264"
-  b_vcodec="2400k"
-  v_preset="medium"
+  b_vcodec="2200k"
+  v_preset="slow"
   acodec="aac"
-  b_acodec="256k"
+  b_acodec="192k"
   default_lang_audio="spa"
   default_lang_subt="spa"
   v_ext="mp4"
@@ -598,7 +598,7 @@ edit_video_config() {
     elif [ "${option}" == "b" ] ; then
       # Set bitrate for video
       echo ""
-      echo "* Recommended: 850k / 950k / 2000k / 2400k / 3000k / 6000k / 10000k"
+      echo "* Recommended: 850k / 950k / 2000k / 2200k / 3000k / 6000k / 10000k"
       echo ""
       echo -n "* [Current: ${b_vcodec}] Type bitrate for video: " ; read videobitrate
       if [ -z ${videobitrate} ] ; then

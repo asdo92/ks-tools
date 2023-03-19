@@ -14,10 +14,10 @@ $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>
     ```shell
     - Resolution: 1280x534
     - Video codec: libx264
-    - Bitrate video: 2400k
-    - Preset: medium
+    - Bitrate video: 2200k
+    - Preset: slow
     - Audio codec: aac (stereo)
-    - Bitrate audio: 256k
+    - Bitrate audio: 192k
     - Default Audio: spa
     - Default Subtitle: spa (forced)
     - Container: mp4
@@ -28,10 +28,10 @@ $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>
     ```shell
     rel_size="1280x534"
     vcodec="libx264"
-    b_vcodec="2400k"
-    v_preset="medium"
+    b_vcodec="2200k"
+    v_preset="slow"
     acodec="aac"
-    b_acodec="256k"
+    b_acodec="192k"
     default_lang_audio="spa"
     default_lang_subt="spa"
     v_ext="mp4"
