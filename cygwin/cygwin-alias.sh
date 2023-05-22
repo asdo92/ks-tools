@@ -41,6 +41,7 @@ alias tr="/usr/bin/tr"
 alias wc="/usr/bin/wc"
 alias x264="/usr/bin/x264"
 alias zenity="/usr/bin/zenity"
+alias bc="/usr/bin/bc"
 alias all-commands='ls /bin | grep ".exe" | cut -d "." -f 1'
 
 # List of alias for drives:
