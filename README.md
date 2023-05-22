@@ -50,15 +50,15 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies **(for Arch Linux)**:
     
-          sudo pacman -Syu git make expect rsync openssh sshpass grep coreutils binutils
+          sudo pacman -Syu git make expect rsync openssh sshpass grep coreutils binutils bc
 
     * Install dependencies **(for Ubuntu/Debian)**:
     
-          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils
+          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc
       
     * Install dependencies **(for Fedora)**:
     
-          sudo dnf install git make expect rsync openssh sshpass grep coreutils binutils
+          sudo dnf install git make expect rsync openssh sshpass grep coreutils binutils bc
 
     * Install `ffmpeg` from repository or use the package [ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy):
     
@@ -76,7 +76,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
           install apt-cyg /bin
-          apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils
+          apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils bc
       
     * Download package [ffmpeg-6.0-cygwin-64bit-build2.tar.gz](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy) and install it:
     
@@ -99,7 +99,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils
+          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc
       
     * Install `ffmpeg` from the package [ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy) or from repository:
     
@@ -115,7 +115,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          brew install git make expect rsync openssh grep binutils ffmpeg
+          brew install git make expect rsync openssh grep binutils ffmpeg bc
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb 
       
