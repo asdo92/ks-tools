@@ -54,16 +54,16 @@ fi
 # Setting the correct resolution for the video file
 # Sintaxis: set_resolution <resolution> <file>
 function set_resolution() {
-  check_calc_app_directories="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
+  check_bc_app_directories="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
   set_rel="${1}"
   input_video_file="${2}"
-  calc_found="1"
-  for file in ${check_calc_app_directories} ; do
-    if [ -f ${file}/calc ] ; then
-      calc_found=0
+  bc_found="1"
+  for file in ${check_bc_app_directories} ; do
+    if [ -f ${file}/bc ] ; then
+      bc_found=0
     fi
   done
-  if [ ${calc_found} -eq 0 ] ; then
+  if [ ${bc_found} -eq 0 ] ; then
     file_rel=$(ffmpeg -i "${2}" 2>&1 | grep Stream | grep Video: | grep -Po '\d{3,5}x\d{3,5}')
     if [ -z "${file_rel}" ] ; then
       echo ${set_rel}
@@ -71,14 +71,12 @@ function set_resolution() {
       file_rel_width=$(echo ${file_rel} | cut -d "x" -f 1)
       file_rel_height=$(echo ${file_rel} | cut -d "x" -f 2)
       set_rel_width=$(echo ${set_rel} | cut -d "x" -f 1)
-      aspect_rel=$(calc ${file_rel_width} / ${file_rel_height} | tr -s "~" " ")
-      new_rel_height=$(calc ${set_rel_width} / ${aspect_rel} | cut -d "." -f 1 | tr -s "~" " ")
-      even_number=$(calc ${new_rel_height} % 2)
+      aspect_rel=$(echo ${file_rel_width} / ${file_rel_height} | bc -l)
+      new_rel_height=$(echo ${set_rel_width} / ${aspect_rel} | bc)
+      even_number=$(echo ${new_rel_height} % 2 | bc)
       if [ ${even_number} -ne 0 ] ; then
-        new_rel_height=$(calc ${new_rel_height} + 1)
+        new_rel_height=$(expr ${new_rel_height} + 1)
       fi
-      set_rel_width=$(echo ${set_rel_width})
-      new_rel_height=$(echo ${new_rel_height})
       echo ${set_rel_width}x${new_rel_height}
     fi
   else
