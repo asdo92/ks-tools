@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4s (ks-tools) - Convert video to MP4 format (Series)   #
-# Date: 22-05-2023                                            #
+# Date: 26-05-2023                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
 VERSION="8.5-dev"
-M_DATE="220523"
+M_DATE="260523"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -64,7 +64,7 @@ function set_resolution() {
     fi
   done
   if [ ${bc_found} -eq 0 ] ; then
-    file_rel=$(ffmpeg -i "${2}" 2>&1 | grep Stream | grep Video: | grep -Po '\d{3,5}x\d{3,5}')
+    file_rel=$(ffmpeg -i "${2}" 2>&1 | grep Stream | grep Video: | grep -Po '\d{3,5}x\d{3,5}' | head -1)
     if [ -z "${file_rel}" ] ; then
       echo ${set_rel}
     else
@@ -143,7 +143,7 @@ fi
 
 # Check if ffmpeg is installed
 path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
-dependencies="ffmpeg grep sed grep cut head tail tr cat"
+dependencies="ffmpeg grep sed grep cut head tail tr cat bc"
 dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
