@@ -2,12 +2,12 @@
 
 ##################################################################################
 # ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec) (Series) #
-# Date: 12-03-2023                                                               #
+# Date: 01-10-2023                                                               #
 # Author: q3aql                                                                  #
 # Contact: q3aql@duck.com                                                        #
 ##################################################################################
 VERSION="8.5-dev"
-M_DATE="120323"
+M_DATE="011023"
 
 # Variables
 tempFile="/tmp/ks-av1s-folder.txt"
@@ -21,7 +21,7 @@ if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
 fi
 
 # Check if ffmpeg is installed
-path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
+path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin /home/linuxbrew/.linuxbrew/bin"
 dependencies="ffmpeg grep find grep cut head tail cat"
 dependencies_found=""
 dependencies_not_found=""

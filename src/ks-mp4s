@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4s (ks-tools) - Convert video to MP4 format (Series)   #
-# Date: 26-05-2023                                            #
+# Date: 01-10-2023                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
 VERSION="8.5-dev"
-M_DATE="260523"
+M_DATE="011023"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -54,7 +54,7 @@ fi
 # Setting the correct resolution for the video file
 # Sintaxis: set_resolution <resolution> <file>
 function set_resolution() {
-  check_bc_app_directories="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin"
+  check_bc_app_directories="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin /home/linuxbrew/.linuxbrew/bin"
   set_rel="${1}"
   input_video_file="${2}"
   bc_found="1"
