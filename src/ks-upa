@@ -783,7 +783,7 @@ function showHelp() {
 # Function to check if all the necessary tools
 # for the execution are installed.
 function checkDependencies() {
-  path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin /home/linuxbrew/.linuxbrew/bin"
+  path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix)/bin"
   dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen"
   dependencies_found=""
   dependencies_not_found=""

@@ -43,7 +43,7 @@ if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
 fi
 
 # Check if ffmpeg is installed
-path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin /home/linuxbrew/.linuxbrew/bin"
+path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix)/bin"
 dependencies="ffmpeg grep sed cut head tail tr"
 dependencies_found=""
 dependencies_not_found=""
