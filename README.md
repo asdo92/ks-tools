@@ -60,6 +60,12 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           sudo dnf install git make expect rsync openssh sshpass grep coreutils binutils bc
 
+    * Install dependencies **(for Linux Homebrew)**:
+
+          brew install git make expect rsync openssh grep binutils ffmpeg bc                                                                                                                                         
+          curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb                                                                                               
+          brew install sshpass.rb
+  
     * Install `ffmpeg` from repository or use the package [ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2](https://drive.proton.me/urls/87E226C29C#mcuvbx0p6DLy):
     
           sudo tar jxvf ffmpeg-6.0-linux-gnu-64bit-build2.tar.bz2 -C /
@@ -119,11 +125,17 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb 
       
-    * Install ks-tools cloning the repository:
+    * Install ks-tools cloning the repository **(for MacOS Intel)**:
     
           git clone https://gitlab.com/q3aql/ks-tools
           cd ks-tools
-          sudo make install
+          make -f Makefile.macbrew
+
+    * Install ks-tools cloning the repository **(for MacOS ARM)**:
+    
+          git clone https://gitlab.com/q3aql/ks-tools
+          cd ks-tools
+          make -f Makefile.macbrew.arm
 
 ### External links:
 
