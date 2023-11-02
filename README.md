@@ -133,13 +133,13 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           git clone https://gitlab.com/q3aql/ks-tools
           cd ks-tools
-          make -f Makefile.macbrew
+          sudo make -f Makefile.macbrew
 
     * Install ks-tools cloning the repository **(for MacOS ARM)**:
     
           git clone https://gitlab.com/q3aql/ks-tools
           cd ks-tools
-          make -f Makefile.macbrew.arm
+          sudo make -f Makefile.macbrew.arm
 
 ### External links:
 
