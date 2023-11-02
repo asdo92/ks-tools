@@ -2,15 +2,14 @@
 
 ###############################################################
 # ks-mp4-wrapper (ks-tools) - Wrapper for ks-mp4              #
-# Date: 12-03-2023                                            #
+# Date: 02-11-2023                                            #
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
 VERSION="8.5-dev"
-M_DATE="120323"
+M_DATE="021123"
 
 # Conversion parameters
-ks_mp4_to_wrap="/usr/bin/ks-mp4"
 p_ffmpeg="ffmpeg -i"
 p_ffmpeg_patched="-max_muxing_queue_size 9999"
 rel_size="1280x534"
@@ -42,9 +41,9 @@ if [ ${error_ffmpeg} -ne 0 ] ; then
 fi
 
 # Check if ks-mp4 is installed
-if [ -f ${ks_mp4_to_wrap} ] ; then
-  echo "ks-mp4 detected" > /dev/null
-else
+wrap_test=$(ks-mp4 &> /dev/null)
+error_wrap=$?
+if [ ${error_wrap} -ne 0 ] ; then
   echo ""
   echo "* ks-mp4-wrapper (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
