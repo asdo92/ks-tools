@@ -2,12 +2,12 @@
 
 ########################################################################
 # ks-upa (ks-tools) - Upload audio file(s) to server with scp or rsync #
-# Date: 01-10-2023                                                     #
+# Date: 02-11-2023                                                     #
 # Author: q3aql                                                        #
 # Contact: q3aql@duck.com                                              #
 ########################################################################
 VERSION="8.5-dev"
-M_DATE="011023"
+M_DATE="021123"
 
 # Global parameters.
 dirTemp="/tmp"
@@ -783,7 +783,7 @@ function showHelp() {
 # Function to check if all the necessary tools
 # for the execution are installed.
 function checkDependencies() {
-  path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix)/bin"
+  path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
   dependencies="sshpass expect rsync md5sum scp ssh find grep sed cut head tail cat ssh-keyscan ssh-keygen"
   dependencies_found=""
   dependencies_not_found=""
