@@ -122,7 +122,7 @@ function extractFolderOrFile() {
 # Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
-  sed -i 's/_/ /g' ${dirTemp}/name.tmp
+  sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
   cutDisplayName=$(echo ${DisplayName} | cut -c1)

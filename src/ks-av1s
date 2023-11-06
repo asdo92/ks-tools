@@ -61,7 +61,7 @@ function set_resolution() {
     fi
   done
   if [ ${bc_found} -eq 0 ] ; then
-    file_rel=$(ffmpeg -i "${2}" 2>&1 | grep Stream | grep Video: | grep -Po '\d{3,5}x\d{3,5}' | head -1)
+    file_rel=$(ffmpeg -i "${2}" 2>&1 | grep Stream | grep Video: | grep -Po '\d{3,5}x\d{3,5}' 2> /dev/null | head -1)
     if [ -z "${file_rel}" ] ; then
       echo ${set_rel}
     else
@@ -214,7 +214,7 @@ function removeExtension() {
 # Syntax: showFileWithSpace <file number>
 function showFileWithSpace() {
   echo "${1}" > ${dirTemp}/name.tmp
-  sed -i 's/_/ /g' ${dirTemp}/name.tmp
+  sed -i 's/_/ /g' ${dirTemp}/name.tmp 2> /dev/null
   DisplayName=$(cat ${dirTemp}/name.tmp)
   rm -rf ${dirTemp}/name.tmp
   echo ${DisplayName}
