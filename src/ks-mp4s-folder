@@ -104,7 +104,9 @@ for format in ${formatFiles} ; do
     echo "null" > /dev/null
   else
     echo "+ Video file(s) in .${format} found!"
-    cd "${1}" && ls -1 *.${format} &>> ${tempFile}
+    cd "${1}" && ls -1 *.${format} &> /tmp/tempFile.txt
+    cat /tmp/tempFile.txt >> ${tempFile}
+    rm -rf /tmp/tempFile.txt 2> /dev/null
     fail=0
   fi
 done

@@ -88,9 +88,12 @@ function listArchives() {
     if [ $? -ne 0 ] ; then
       echo "null" > /dev/null
     else
-      find "${1}"/*.${format} &>> ${dirTemp}/${listCompTemp}
+      find "${1}"/*.${format} &> ${dirTemp}/temp.tmp
+      cat ${dirTemp}/temp.tmp >> ${dirTemp}/${listCompTemp}
       echo "+ Audio file(s) in .${format} found!"
-      cd "${1}" && ls -1 *.${format} &>> ${dirTemp}/${listTemp}
+      cd "${1}" && ls -1 *.${format} &> ${dirTemp}/temp.tmp
+      cat ${dirTemp}/temp.tmp >> ${dirTemp}/${listTemp}
+      rm -rf ${dirTemp}/temp.tmp 2> /dev/null
       fail=0
     fi
   done
