@@ -6,7 +6,7 @@
 # Author: q3aql                                               #
 # Contact: q3aql@duck.com                                     #
 ###############################################################
-VERSION="8.5-dev"
+VERSION="8.5"
 M_DATE="021123"
 
 # Detect version ffmpeg for old releases
