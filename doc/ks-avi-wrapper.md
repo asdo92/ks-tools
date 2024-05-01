@@ -48,5 +48,5 @@ $ ks-avi-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 720x404 "My video" 20
     
 ### Back to README.md
     
-* [Go back](../README.md)
+* [Go back](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/README.md)
   

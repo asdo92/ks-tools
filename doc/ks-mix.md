@@ -105,5 +105,5 @@ _Note: After executing the command, an assistant will ask us from what hour, min
     
 ### Back to README.md
     
-* [Go back](../README.md)
+* [Go back](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/README.md)
   

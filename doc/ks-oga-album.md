@@ -26,7 +26,7 @@ $ ks-oga-album </absolute/path/album>
     default_lang_audio="spa"`
     ````
 
-  * RECOMMENDED: You can use the [ks-conf](https://gitlab.com/q3aql/ks-tools/blob/main/doc/ks-conf.md) tool to edit the configuration.
+  * RECOMMENDED: You can use the [ks-conf](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/doc/ks-conf.md) tool to edit the configuration.
     
 ### Example of use:
 
@@ -61,5 +61,5 @@ $ ks-oga-album </absolute/path/album>
     
 ### Back to README.md
     
-* [Go back](../README.md)
+* [Go back](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/README.md)
   
