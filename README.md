@@ -66,9 +66,9 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb
   
-    * Install `ffmpeg` from repository or use the package [ffmpeg-7.0-linux-gnu-64bit-build.tar.bz2](https://q3aql.dev/ffmpeg-builds/ffmpeg-7.0-linux-gnu-64bit-build.tar.bz2):
+    * Install `ffmpeg` from repository or use the package [ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2](https://q3aql.dev/ffmpeg-builds/ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2):
     
-          sudo tar jxvf ffmpeg-7.0-linux-gnu-64bit-build.tar.bz2 -C /
+          sudo tar jxvf ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2 -C /
       
     * Install ks-tools cloning the repository:
     
@@ -88,7 +88,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           install apt-cyg /bin
           apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils bc
       
-    * Download package [ffmpeg-7.0-cygwin-64bit-build.tar.gz](https://q3aql.dev/ffmpeg-builds/ffmpeg-7.0-cygwin-64bit-build.tar.gz) and install it:
+    * Download package [ffmpeg-7.0.2-cygwin-64bit-build.tar.gz](https://q3aql.dev/ffmpeg-builds/ffmpeg-7.0.2-cygwin-64bit-build.tar.gz) and install it:
     
           tar zxvf ffmpeg-7.0-cygwin-64bit-build.tar.gz -C /
 
@@ -111,7 +111,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc
       
-    * Install `ffmpeg` from the package [ffmpeg-6.1-linux-gnu-64bit-build.tar.bz2](https://drive.proton.me/urls/FZH7FV29FR#5FuAfSzxhH6h) or from repository:
+    * Install `ffmpeg` from the package [ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2](https://q3aql.dev/ffmpeg-builds/ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2) or from repository:
     
           sudo apt install ffmpeg
 
