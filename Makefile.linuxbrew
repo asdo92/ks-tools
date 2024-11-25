@@ -91,33 +91,33 @@ compile:
 	cp -rf wrapper/ks-vob-wrapper build
 	cp -rf wrapper/ks-av1-wrapper build
 	cp -rf wrapper/ks-av1s-wrapper build
-	shc -f build/ks-avi -o build/ks-avi.out
-	shc -f build/ks-crop -o build/ks-crop.out
-	shc -f build/ks-mix -o build/ks-mix.out
-	shc -f build/ks-mp3 -o build/ks-mp3.out
-	shc -f build/ks-mp3-album -o build/ks-mp3-album.out
-	shc -f build/ks-mp4 -o build/ks-mp4.out
-	shc -f build/ks-mp4k -o build/ks-mp4k.out
-	shc -f build/ks-mp4s -o build/ks-mp4s.out
-	shc -f build/ks-mp4s-folder -o build/ks-mp4s-folder.out
-	shc -f build/ks-av1s-folder -o build/ks-av1s-folder.out
-	shc -f build/ks-oga -o build/ks-oga.out
-	shc -f build/ks-oga-album -o build/ks-oga-album.out
-	shc -f build/ks-upa -o build/ks-upa.out
-	shc -f build/ks-upf -o build/ks-upf.out
-	shc -f build/ks-upr -o build/ks-upr.out
-	shc -f build/ks-upv -o build/ks-upv.out
-	shc -f build/ks-vob -o build/ks-vob.out
-	shc -f build/ks-av1 -o build/ks-av1.out
-	shc -f build/ks-av1s -o build/ks-av1s.out
-	shc -f build/ks-conf -o build/ks-conf.out
-	shc -f build/ks-avi-wrapper -o build/ks-avi-wrapper.out
-	shc -f build/ks-mp4k-wrapper -o build/ks-mp4k-wrapper.out
-	shc -f build/ks-mp4s-wrapper -o build/ks-mp4s-wrapper.out
-	shc -f build/ks-mp4-wrapper -o build/ks-mp4-wrapper.out
-	shc -f build/ks-vob-wrapper -o build/ks-vob-wrapper.out
-	shc -f build/ks-av1-wrapper -o build/ks-av1-wrapper.out
-	shc -f build/ks-av1s-wrapper -o build/ks-av1s-wrapper.out
+	shc -rS -f build/ks-avi -o build/ks-avi.out
+	shc -rS -f build/ks-crop -o build/ks-crop.out
+	shc -rS -f build/ks-mix -o build/ks-mix.out
+	shc -rS -f build/ks-mp3 -o build/ks-mp3.out
+	shc -rS -f build/ks-mp3-album -o build/ks-mp3-album.out
+	shc -rS -f build/ks-mp4 -o build/ks-mp4.out
+	shc -rS -f build/ks-mp4k -o build/ks-mp4k.out
+	shc -rS -f build/ks-mp4s -o build/ks-mp4s.out
+	shc -rS -f build/ks-mp4s-folder -o build/ks-mp4s-folder.out
+	shc -rS -f build/ks-av1s-folder -o build/ks-av1s-folder.out
+	shc -rS -f build/ks-oga -o build/ks-oga.out
+	shc -rS -f build/ks-oga-album -o build/ks-oga-album.out
+	shc -rS -f build/ks-upa -o build/ks-upa.out
+	shc -rS -f build/ks-upf -o build/ks-upf.out
+	shc -rS -f build/ks-upr -o build/ks-upr.out
+	shc -rS -f build/ks-upv -o build/ks-upv.out
+	shc -rS -f build/ks-vob -o build/ks-vob.out
+	shc -rS -f build/ks-av1 -o build/ks-av1.out
+	shc -rS -f build/ks-av1s -o build/ks-av1s.out
+	shc -rS -f build/ks-conf -o build/ks-conf.out
+	shc -rS -f build/ks-avi-wrapper -o build/ks-avi-wrapper.out
+	shc -rS -f build/ks-mp4k-wrapper -o build/ks-mp4k-wrapper.out
+	shc -rS -f build/ks-mp4s-wrapper -o build/ks-mp4s-wrapper.out
+	shc -rS -f build/ks-mp4-wrapper -o build/ks-mp4-wrapper.out
+	shc -rS -f build/ks-vob-wrapper -o build/ks-vob-wrapper.out
+	shc -rS -f build/ks-av1-wrapper -o build/ks-av1-wrapper.out
+	shc -rS -f build/ks-av1s-wrapper -o build/ks-av1s-wrapper.out
 	rm -rf build/ks-avi.out
 	rm -rf build/ks-crop.out
 	rm -rf build/ks-mix.out
@@ -197,33 +197,33 @@ compile:
 	mv build/ks-vob-wrapper.x.c build/ks-vob-wrapper.c
 	mv build/ks-av1-wrapper.x.c build/ks-av1-wrapper.c
 	mv build/ks-av1s-wrapper.x.c build/ks-av1s-wrapper.c
-	gcc build/ks-avi.c -o build/ks-avi
-	gcc build/ks-avi-wrapper.c -o build/ks-avi-wrapper
-	gcc build/ks-crop.c -o build/ks-crop
-	gcc build/ks-mix.c -o build/ks-mix
-	gcc build/ks-mp3-album.c -o build/ks-mp3-album
-	gcc build/ks-mp3.c -o build/ks-mp3
-	gcc build/ks-mp4.c -o build/ks-mp4
-	gcc build/ks-mp4k.c -o build/ks-mp4k
-	gcc build/ks-mp4k-wrapper.c -o build/ks-mp4k-wrapper
-	gcc build/ks-mp4s.c -o build/ks-mp4s
-	gcc build/ks-mp4s-folder.c -o build/ks-mp4s-folder
-	gcc build/ks-av1s-folder.c -o build/ks-av1s-folder
-	gcc build/ks-mp4s-wrapper.c -o build/ks-mp4s-wrapper
-	gcc build/ks-mp4-wrapper.c -o build/ks-mp4-wrapper
-	gcc build/ks-oga-album.c -o build/ks-oga-album
-	gcc build/ks-oga.c -o build/ks-oga
-	gcc build/ks-upa.c -o build/ks-upa
-	gcc build/ks-upf.c -o build/ks-upf
-	gcc build/ks-upr.c -o build/ks-upr
-	gcc build/ks-upv.c -o build/ks-upv
-	gcc build/ks-vob.c -o build/ks-vob
-	gcc build/ks-av1.c -o build/ks-av1
-	gcc build/ks-av1s.c -o build/ks-av1s
-	gcc build/ks-conf.c -o build/ks-conf
-	gcc build/ks-vob-wrapper.c -o build/ks-vob-wrapper
-	gcc build/ks-av1-wrapper.c -o build/ks-av1-wrapper
-	gcc build/ks-av1s-wrapper.c -o build/ks-av1s-wrapper
+	gcc -static build/ks-avi.c -o build/ks-avi
+	gcc -static build/ks-avi-wrapper.c -o build/ks-avi-wrapper
+	gcc -static build/ks-crop.c -o build/ks-crop
+	gcc -static build/ks-mix.c -o build/ks-mix
+	gcc -static build/ks-mp3-album.c -o build/ks-mp3-album
+	gcc -static build/ks-mp3.c -o build/ks-mp3
+	gcc -static build/ks-mp4.c -o build/ks-mp4
+	gcc -static build/ks-mp4k.c -o build/ks-mp4k
+	gcc -static build/ks-mp4k-wrapper.c -o build/ks-mp4k-wrapper
+	gcc -static build/ks-mp4s.c -o build/ks-mp4s
+	gcc -static build/ks-mp4s-folder.c -o build/ks-mp4s-folder
+	gcc -static build/ks-av1s-folder.c -o build/ks-av1s-folder
+	gcc -static build/ks-mp4s-wrapper.c -o build/ks-mp4s-wrapper
+	gcc -static build/ks-mp4-wrapper.c -o build/ks-mp4-wrapper
+	gcc -static build/ks-oga-album.c -o build/ks-oga-album
+	gcc -static build/ks-oga.c -o build/ks-oga
+	gcc -static build/ks-upa.c -o build/ks-upa
+	gcc -static build/ks-upf.c -o build/ks-upf
+	gcc -static build/ks-upr.c -o build/ks-upr
+	gcc -static build/ks-upv.c -o build/ks-upv
+	gcc -static build/ks-vob.c -o build/ks-vob
+	gcc -static build/ks-av1.c -o build/ks-av1
+	gcc -static build/ks-av1s.c -o build/ks-av1s
+	gcc -static build/ks-conf.c -o build/ks-conf
+	gcc -static build/ks-vob-wrapper.c -o build/ks-vob-wrapper
+	gcc -static build/ks-av1-wrapper.c -o build/ks-av1-wrapper
+	gcc -static build/ks-av1s-wrapper.c -o build/ks-av1s-wrapper
 	
 compile-install:
 	cp -rf build/ks-upv $(PREFIX)/bin/ks-upv
