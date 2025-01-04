@@ -2,12 +2,12 @@
 
 #####################################################################
 # ks-mix (ks-tools) - Extract video/audio and mix video/audio files #
-# Date: 02-11-2023                                                  #
+# Date: 04-01-2025                                                  #
 # Author: q3aql                                                     #
 # Contact: q3aql@duck.com                                           #
 #####################################################################
 VERSION="8.5"
-M_DATE="021123"
+M_DATE="040125"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -18,7 +18,7 @@ unset IFS
 if [ -z "${ffmpeg_version}" ] ; then
   video_sync="vsync"
 else
-  if [ ${ffmpeg_version} -lt 5 ] ; then
+  if [ ${ffmpeg_version} -lt 5 ] 2> /dev/null ; then
     video_sync="vsync"
   else
     video_sync="fps_mode"
