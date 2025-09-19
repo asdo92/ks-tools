@@ -2,8 +2,8 @@
 
 ############################################
 # Script for build FFmpeg on Cygwin x86_64 #
-# Author: q3aql                            #
-# Contact: q3aql@duck.com                  #
+# Author: asdo92                            #
+# Contact: asdo92@duck.com                  #
 ############################################
 
 # IMPORTANT
@@ -78,7 +78,7 @@ if [ -f "/usr/bin/apt-cyg" ] ; then
   sleep 1
 else
   cd /tmp
-  git clone "https://github.com/q3aql/ffmpeg-builds"
+  git clone "https://github.com/asdo92/ffmpeg-builds"
   cd ffmpeg-builds
   cp -rfv apt-cyg /usr/bin
   echo "* apt-cyg installed"
@@ -89,7 +89,7 @@ if [ -f /usr/include/w32api/strsafe.h_fix ] ; then
   echo "* strsafe.h was fixed previously"
 else
   cd /tmp
-  git clone "https://github.com/q3aql/ffmpeg-builds"
+  git clone "https://github.com/asdo92/ffmpeg-builds"
   cd ffmpeg-builds
   cp -rfv /usr/include/w32api/strsafe.h /usr/include/w32api/strsafe.h.bck
   cp -rfv cygwin_fix_strsafe.h /usr/include/w32api/strsafe.h
