@@ -48,5 +48,5 @@ $ ks-mp4k-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 "My video"
     
 ### Back to README.md
     
-* [Go back](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/README.md)
+* [Go back](/README.md)
   

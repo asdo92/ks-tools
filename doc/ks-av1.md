@@ -35,7 +35,7 @@ $ ks-av1 </absolute/path/video.mkv> </path/prefix_name>
     v_ext="webm"
     ````
 
-  * RECOMMENDED: You can use the [ks-conf](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/doc/ks-conf.md) tool to edit the configuration.
+  * RECOMMENDED: You can use the [ks-conf](/doc/ks-conf.md) tool to edit the configuration.
 
 ### Example of use:
 
@@ -93,5 +93,5 @@ $ ks-av1 </absolute/path/video.mkv> </path/prefix_name>
     
 ### Back to README.md
     
-* [Go back](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/README.md)
+* [Go back](/README.md)
   

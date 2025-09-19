@@ -51,5 +51,5 @@ $ ks-av1s-folder </path/folder> [subs]
     
 ### Back to README.md
     
-* [Go back](https://git.q3aql.dev/q3aql/ks-tools/src/branch/main/README.md)
+* [Go back](/README.md)
   
