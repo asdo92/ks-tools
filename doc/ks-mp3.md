@@ -52,7 +52,7 @@ $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>
     * (Default: Example) Type name of title: My song
     * (Default: Album-Disc) Type name of album: My personal album
     * (Default: 01) Type number of track: 2
-    * (Default: Artist) Type name of artist: q3aql
+    * (Default: Artist) Type name of artist: asdo92
     * (Default: 2021) Type the year: 2016
     * (Default: Pop) Type the genre: Rap
 
@@ -61,7 +61,7 @@ $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>
       # Convert the file 'Example.mkv' to MP3 Audio
       ffmpeg -i "Example.mkv" -map 0:1 -c:a libmp3lame -b:a 128k 
       -metadata title="My song" -metadata date="2016" -metadata genre="Rap"
-      -metadata album="My personal album" -metadata artist="q3aql" 
+      -metadata album="My personal album" -metadata artist="asdo92" 
       -metadata track="2" "Example.mp3"
 
     * (Default: y) Do you want run the conversion? (y/n): n

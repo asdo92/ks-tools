@@ -32,7 +32,7 @@ $ ks-conf
   * If you select option `m`,`k`,`s` or `a` will see the following menu:
   
     ```shell
-    * Editing /home/q3aql/.ks-tools/ks-mp4
+    * Editing /home/asdo92/.ks-tools/ks-mp4
     
     r - Edit resolution (1280x534)
     v - Edit video codec (libx264)
@@ -54,7 +54,7 @@ $ ks-conf
   * If you select option `p` or `o` will see the following menu:
   
     ```shell
-    * Editing /home/q3aql/.ks-tools/ks-mp3
+    * Editing /home/asdo92/.ks-tools/ks-mp3
     
     a - Edit audio bitrate (128k)
     l - Edit preferred language (spa)
