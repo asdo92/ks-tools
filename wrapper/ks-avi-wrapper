@@ -3,8 +3,8 @@
 ###############################################################
 # ks-avi-wrapper (ks-tools) - Wrapper for ks-avi              #
 # Date: 02-11-2023                                            #
-# Author: asdo92                                               #
-# Contact: asdo92@duck.com                                     #
+# Author: asdo92                                              #
+# Contact: asdo92@duck.com                                    #
 ###############################################################
 VERSION="8.5"
 M_DATE="021123"

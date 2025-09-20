@@ -2,8 +2,8 @@
 
 ############################################
 # Script for build FFmpeg on Cygwin x86_64 #
-# Author: asdo92                            #
-# Contact: asdo92@duck.com                  #
+# Author: asdo92                           #
+# Contact: asdo92@duck.com                 #
 ############################################
 
 # IMPORTANT

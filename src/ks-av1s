@@ -3,8 +3,8 @@
 ############################################################
 # ks-av1s (ks-tools) - Convert video to AV1 codec (Series) #
 # Date: 04-01-2025                                         #
-# Author: asdo92                                            #
-# Contact: asdo92@duck.com                                  #
+# Author: asdo92                                           #
+# Contact: asdo92@duck.com                                 #
 ############################################################
 VERSION="8.5"
 M_DATE="040125"
