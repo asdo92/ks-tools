@@ -66,7 +66,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb
   
-    * Install ffmpeg using this script:
+    * Install ffmpeg using this script (use [BtbN Builds](https://github.com/BtbN/FFmpeg-Builds)):
     
           curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-linux64.sh" | sudo bash
       
