@@ -66,9 +66,9 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
           curl -L https://raw.githubusercontent.com/kadwanev/bigboybrew/master/Library/Formula/sshpass.rb > sshpass.rb
           brew install sshpass.rb
   
-    * Install `ffmpeg` from repository or use the package [ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2](https://asdo92.yougeek.dev/ffmpeg/ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2):
+    * Install ffmpeg using this script:
     
-          sudo tar jxvf ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2 -C /
+          curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-linux64.sh" | sudo bash
       
     * Install ks-tools cloning the repository:
     
@@ -86,19 +86,9 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     
           lynx -source rawgit.com/transcode-open/apt-cyg/master/apt-cyg > apt-cyg
           install apt-cyg /bin
-          apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils bc
+          apt-cyg install git make expect rsync openssh sshpass grep coreutils binutils bc wget curl unzip
+          curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-cygwin64.sh" | bash
       
-    * Download package [ffmpeg-7.0.2-cygwin-64bit-build.tar.gz](https://asdo92.yougeek.dev/ffmpeg/ffmpeg-7.0.2-cygwin-64bit-build.tar.gz) and install it:
-    
-          tar zxvf ffmpeg-7.0-cygwin-64bit-build.tar.gz -C /
-
-    * If you prefer your own ffmpeg build, use this script for build it:
-
-          git clone https://github.com/asdo92/ks-tools
-          cd ks-tools/cygwin
-          chmod +x ffmpeg-build-cygwin64.sh
-          ./ffmpeg-build-cygwin64.sh
-  
     * Install ks-tools cloning the repository:
 
           git clone https://github.com/asdo92/ks-tools
@@ -109,12 +99,9 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
   
     * Install dependencies:
     
-          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc
+          sudo apt install git make expect rsync openssh-client openssh-server sshpass grep binutils bc wgt curl tar
+          curl -L "https://asdo92.yougeek.dev/ffmpeg/scripts/update-ffmpeg-wsl.sh" | sudo bash
       
-    * Install `ffmpeg` from the package [ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2](https://asdo92.yougeek.dev/ffmpeg/ffmpeg-7.0.2-linux-gnu-64bit-build.tar.bz2) or from repository:
-    
-          sudo apt install ffmpeg
-
     * Install ks-tools cloning the repository:
     
           git clone https://github.com/asdo92/ks-tools
