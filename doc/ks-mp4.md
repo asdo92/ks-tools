@@ -69,6 +69,7 @@ $ ks-mp4 </absolute/path/video.mkv> </path/prefix_name>
     * (Default: 0:1) Type the number of audio track: 
     * (Default: n) Do you want include subtitles? (y/n): y
     * (Default: 0:3) Type the number of subtitle track: 0:5
+    * (Default: n) Do you want to force widescreen (for 4:3 input)? (y/n): 
     * (Default: 1280x534) Type the resolution: 
     * (Default: n) Do you want apply '-max_muxing_queue_size 9999' patch? (y/n): n
 
