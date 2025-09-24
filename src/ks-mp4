@@ -275,6 +275,8 @@ elif [ "${selected_codec}" == "libx265" ] ; then
   profile_codec=" -profile:v main "
 elif [ "${selected_codec}" == "libaom-av1" ] ; then
   profile_codec=" -profile:v main "
+elif [ "${selected_codec}" == "libsvtav1" ] ; then
+  profile_codec=" -profile:v main "
 else
   profile_codec=" "
 fi
@@ -548,8 +550,9 @@ else
   else
     # Variable for only show widescreen
     if [ "${force_widescreen}" == "y" ] ; then
-      restore_conversion=${p_conversion}
-      p_conversion=${w_conversion}
+      w_conversion=${w_conversion}
+    else
+      w_conversion=${p_conversion}
     fi
     if [ "${patch_thread}" == "y" ] ; then
       echo "  # Convert the file '${1}' to MP4"
@@ -559,8 +562,6 @@ else
       echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${w_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
     fi
   fi
-  # Restore widescreen variable for execution
-  p_conversion=${restore_conversion}
   # Execute commands for conversion
   echo ""
   echo -n "* (Default: y) Do you want run the conversion? (y/n): " ; read run_commands_ffmpeg
