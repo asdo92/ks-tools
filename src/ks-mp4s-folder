@@ -2,12 +2,12 @@
 
 #################################################################################
 # ks-mp4s-folder (ks-tools) - Convert videos from folder to MP4 format (Series) #
-# Date: 02-11-2023                                                              #
+# Date: 24-09-2025                                                              #
 # Author: asdo92                                                                #
 # Contact: asdo92@duck.com                                                      #
 #################################################################################
 VERSION="8.5"
-M_DATE="021123"
+M_DATE="240925"
 
 # Variables
 tempFile="/tmp/ks-mp4s-folder.txt"
@@ -62,11 +62,13 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "+ Syntax: "
   echo ""
-  echo "  $ ks-mp4s-folder </path/folder> [subs]"
+  echo "  $ ks-mp4s-folder </path/folder> [subs/widescreen/subs-widescreen]"
   echo ""
   echo " + Examples: "
   echo "     $ ks-mp4s-folder /data/Westworld"
   echo "     $ ks-mp4s-folder /data/Daredevil subs"
+  echo "     $ ks-mp4s-folder /data/Daredevil widescreen"
+  echo "     $ ks-mp4s-folder /data/Daredevil subs-widescreen"
   echo ""
   echo "* Notes:"
   echo ""
@@ -123,9 +125,19 @@ else
   echo "* Files to convert (${1}):"
   convert_files=1
   if [ "${2}" == "subs" ] ; then
+    widescreen_enabled=0
     subtitles_enabled=1
     subtitles_show="with subtitles"
+  elif [ "${2}" == "widescreen" ] ; then
+    widescreen_enabled=1
+    subtitles_enabled=0
+    subtitles_show="without subtitles but forcing widescreen"
+  elif [ "${2}" == "subs-widescreen" ] ; then
+    widescreen_enabled=1
+    subtitles_enabled=1
+    subtitles_show="with subtitles and forcing widescreen"
   else
+    widescreen_enabled=0
     subtitles_enabled=0
     subtitles_show="without subtitles"
   fi
@@ -147,11 +159,21 @@ else
     while [ ${convert_files} -le ${num_files} ] ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
       if [ ${subtitles_enabled} -eq 1 ] ; then
-        fname=$(echo "${show_file}" | cut -d "." -f 1)
-        ks-mp4s-wrapper --conv-with-sub "${show_file}" "to-mp4/${fname}"
+        if [ ${widescreen_enabled} -eq 1 ] ; then
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-mp4s-wrapper --conv-with-sub-widescreen "${show_file}" "to-mp4/${fname}"
+        else
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-mp4s-wrapper --conv-with-sub "${show_file}" "to-mp4/${fname}"
+        fi
       else
-        fname=$(echo "${show_file}" | cut -d "." -f 1)
-        ks-mp4s-wrapper --conv "${show_file}" "to-mp4/${fname}"
+        if [ ${widescreen_enabled} -eq 1 ] ; then
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-mp4s-wrapper --conv-widescreen "${show_file}" "to-mp4/${fname}"
+        else
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-mp4s-wrapper --conv "${show_file}" "to-mp4/${fname}"
+        fi
       fi
       convert_files=$(expr ${convert_files} + 1)
     done
