@@ -440,20 +440,19 @@ else
     force_widescreen="y"
     rel_size="1280x720"
     if [ "${subtitles_y_n}" == "y" ] ; then
-      p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-      w_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+      w_conversion=${p_conversion}
     else
       if [ -z "${codec_h265_hevc}" ] ; then
-        p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2 -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-        w_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\" -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+        p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf crop=ih*16/9:ih:(iw-ih*16/9)/2:0 -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+        w_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\" -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
       else
         if [ -z "${hevc_hdr}" ] ; then
-          p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2 -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-          w_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\" -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+          p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf crop=ih*16/9:ih:(iw-ih*16/9)/2:0 -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+          w_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\" -pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         else
-          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2,zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-pix_
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf crop=ih*16/9:ih:(iw-ih*16/9)/2:0,zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-pix_
 fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
-          w_conversion="-s ${rel_size} -c:v ${vcodec} -vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-
+          w_conversion="-s ${rel_size} -c:v ${vcodec} -vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-
 pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         fi
       fi
@@ -531,14 +530,14 @@ pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_aco
       echo "  # Convert the file '${1}' to MP4"
       if [ ! -z "${hevc_hdr}" ] ; then
         if [ "${force_widescreen}" == "y" ] ; then
-          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         else
           p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         fi
         echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
       else
         if [ "${force_widescreen}" == "y" ] ; then
-          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\",subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\",subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
         else
           echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
         fi
@@ -547,14 +546,14 @@ pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_aco
       echo "  # Convert the file '${1}' to MP4"
       if [ ! -z "${hevc_hdr}" ] ; then
         if [ "${force_widescreen}" == "y" ] ; then
-          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         else
           p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec}"
         fi
         echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
       else
         if [ "${force_widescreen}" == "y" ] ; then
-          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf \"crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2\",subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf \"crop=ih*16/9:ih:(iw-ih*16/9)/2:0\",subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
         else
           echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
         fi
@@ -586,13 +585,13 @@ pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_aco
       if [ "${patch_thread}" == "y" ] ; then
         if [ ! -z "${hevc_hdr}" ] ; then
           if [ "${force_widescreen}" == "y" ] ; then
-            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf "crop=iw:iw*10/16:(in_w-out_w)/2:(in_h-out_h)/2",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf "crop=ih*16/9:ih:(iw-ih*16/9)/2:0",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
           else
             ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
           fi
         else
           if [ "${force_widescreen}" == "y" ] ; then
-            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf "crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2",subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf "crop=ih*16/9:ih:(iw-ih*16/9)/2:0",subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
           else
             ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
           fi
@@ -600,13 +599,13 @@ pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_aco
       else
         if [ ! -z "${hevc_hdr}" ] ; then
           if [ "${force_widescreen}" == "y" ] ; then
-            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf "crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf "crop=ih*16/9:ih:(iw-ih*16/9)/2:0",zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
           else
             ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -preset ${v_preset} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
           fi
         else
           if [ "${force_widescreen}" == "y" ] ; then
-            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf "crop=iw:iw*9/16:(in_w-out_w)/2:(in_h-out_h)/2",subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf "crop=ih*16/9:ih:(iw-ih*16/9)/2:0",subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
           else
             ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
           fi
