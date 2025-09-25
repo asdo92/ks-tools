@@ -438,7 +438,7 @@ else
   echo -n "* (Default: n) Do you want to force widescreen (for 4:3 input)? (y/n): " ; read ask_force_widescreen
   if [ "${ask_force_widescreen}" == "y" ] ; then
     force_widescreen="y"
-    rel_size="720x480"
+    rel_size="1280x720"
     if [ "${subtitles_y_n}" == "y" ] ; then
       p_conversion=${p_conversion}
     else
