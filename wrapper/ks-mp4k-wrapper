@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-mp4k-wrapper (ks-tools) - Wrapper for ks-mp4k            #
-# Date: 02-11-2023                                            #
+# Date: 24-09-2025                                            #
 # Author: asdo92                                              #
 # Contact: asdo92@duck.com                                    #
 ###############################################################
 VERSION="8.5"
-M_DATE="021123"
+M_DATE="240925"
 
 # Conversion parameters
 p_ffmpeg="ffmpeg -i"
@@ -265,17 +265,22 @@ function showHelp() {
   echo ""
   echo " $ ks-mp4k-wrapper --conv </path/video_file> </path/output_prefix> <video-track> <audio-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
   echo " $ ks-mp4k-wrapper --conv-with-sub </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  echo " $ ks-mp4k-wrapper --conv-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
+  echo " $ ks-mp4k-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix> <video-track> <audio-track> <subs-track> <resolution> \"<name-title>\" <year> \"<genre>\" [patch]"
   echo ""
   echo " * CONVERT WITH DEFAULT DETECTION (NOT RECOMMENDED):"
   echo ""
   echo " $ ks-mp4k-wrapper --conv </path/video_file> </path/output_prefix>"
+  echo " $ ks-mp4k-wrapper --conv-widescreen </path/video_file> </path/output_prefix>"
   echo " $ ks-mp4k-wrapper --conv-with-sub </path/video_file> </path/output_prefix>"
+  echo " $ ks-mp4k-wrapper --conv-with-sub-widescreen </path/video_file> </path/output_prefix>"
   echo ""
   echo "* EXAMPLES:"
   echo ""
   echo " $ ks-mp4k-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\""
   echo " $ ks-mp4k-wrapper --conv-with-sub /tmp/video.mkv /tmp/output 0:0 0:1 0:3 3840x2160 \"My video\" 2018 \"Comedy\""
-  echo " $ ks-mp4k-wrapper --conv /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\" patch"
+  echo " $ ks-mp4k-wrapper --conv-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 3840x2160 \"My video\" 2018 \"Comedy\" patch"
+  echo " $ ks-mp4k-wrapper --conv-with-sub-widescreen /tmp/video.mkv /tmp/output 0:0 0:1 0:3 3840x2160 \"My video\" 2018 \"Comedy\""
   echo ""
   echo "* Notes:"
   echo ""
@@ -348,9 +353,23 @@ elif [ "${1}" == "--conv" ] ; then
   # Check if file exist
   if [ -f "${2}" ] ; then
     if [ "${10}" == "patch" ] ; then
-      echo -e "${4}\n${5}\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+      echo -e "${4}\n${5}\nn\nn\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
     else
-      echo -e "${4}\n${5}\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+      echo -e "${4}\n${5}\nn\nn\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+    fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--conv-widescreen" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    if [ "${10}" == "patch" ] ; then
+      echo -e "${4}\n${5}\nn\ny\n${6}\ny\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
+    else
+      echo -e "${4}\n${5}\nn\ny\n${6}\nn\n${7}\n${8}\n${9}\ny\n" | ks-mp4k "${2}" "${3}"
     fi
   else
     echo ""
@@ -362,9 +381,23 @@ elif [ "${1}" == "--conv-with-sub" ] ; then
   # Check if file exist
   if [ -f "${2}" ] ; then
     if [ "${11}" == "patch" ] ; then
-      echo -e "${4}\n${5}\ny\n${6}\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+      echo -e "${4}\n${5}\ny\n${6}\nn\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
     else
-      echo -e "${4}\n${5}\ny\n${6}\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+      echo -e "${4}\n${5}\ny\n${6}\nn\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+    fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist!'"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "--conv-with-sub-widescreen" ] ; then
+  # Check if file exist
+  if [ -f "${2}" ] ; then
+    if [ "${11}" == "patch" ] ; then
+      echo -e "${4}\n${5}\ny\n${6}\ny\n${7}\ny\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
+    else
+      echo -e "${4}\n${5}\ny\n${6}\ny\n${7}\nn\n${8}\n${9}\n${10}\ny\n" | ks-mp4k "${2}" "${3}"
     fi
   else
     echo ""
