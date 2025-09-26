@@ -1164,7 +1164,7 @@ elif [ "${1}" == "-evat" ] ; then
       echo ""
       echo -n "* Starting extract video and audio tracks (${2}) "
       sleep 3
-      ffmpeg -y -i "${2}" -map ${video_track} -map ${audio_track} -c:v copy -c:a copy -ss ${hourCut}:${minuteCut}:${secondCut} "${output_file_dir}"
+      ffmpeg -y -i "${2}" -map ${video_track} -map ${audio_track} -c:v copy -c:a copy -ss ${hourCut}:${minuteCut}:${secondCut} -reset_timestamps 1 "${output_file_dir}"
       echo ""
       echo -n "* Extracted video and audio into ${output_file_dir}"
       sleep 2
@@ -1272,7 +1272,7 @@ elif [ "${1}" == "-evat" ] ; then
         echo ""
         echo -n "* Starting extract video and audio tracks (${2}) "
         sleep 3
-        ffmpeg -y -i "${2}" -map ${video_track} -map ${audio_track} -c:v copy -c:a copy -ss ${hourCut}:${minuteCut}:${secondCut} -t ${hourCutAfter}:${minuteCutAfter}:${secondCutAfter} "${output_file_dir}"
+        ffmpeg -y -i "${2}" -map ${video_track} -map ${audio_track} -c:v copy -c:a copy -ss ${hourCut}:${minuteCut}:${secondCut} -t ${hourCutAfter}:${minuteCutAfter}:${secondCutAfter} -reset_timestamps 1 "${output_file_dir}"
         echo ""
         echo -n "* Extracted video and audio into ${output_file_dir}"
         sleep 2
