@@ -1,13 +1,13 @@
 #!/bin/bash
 
-##################################################################################
-# ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec) (Series) #
-# Date: 02-11-2023                                                               #
-# Author: asdo92                                                                 #
-# Contact: asdo92@duck.com                                                       #
-##################################################################################
+###################################################################################
+# ks-av1s-folder (ks-tools) - Convert videos from folder to AV1 (Codec)  (Series) #
+# Date: 26-09-2025                                                                #
+# Author: asdo92                                                                  #
+# Contact: asdo92@duck.com                                                        #
+###################################################################################
 VERSION="8.5"
-M_DATE="021123"
+M_DATE="260925"
 
 # Variables
 tempFile="/tmp/ks-av1s-folder.txt"
@@ -58,15 +58,17 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
-  echo "- Convert videos from folder to AV1 codec (Series)"
+  echo "- Convert videos from folder to AV1 (Codec) (Series)"
   echo ""
   echo "+ Syntax: "
   echo ""
-  echo "  $ ks-av1s-folder </path/folder> [subs]"
+  echo "  $ ks-av1s-folder </path/folder> [subs/widescreen/subs-widescreen]"
   echo ""
   echo " + Examples: "
   echo "     $ ks-av1s-folder /data/Westworld"
   echo "     $ ks-av1s-folder /data/Daredevil subs"
+  echo "     $ ks-av1s-folder /data/Daredevil widescreen"
+  echo "     $ ks-av1s-folder /data/Daredevil subs-widescreen"
   echo ""
   echo "* Notes:"
   echo ""
@@ -93,7 +95,7 @@ clear
 echo ""
 echo "* ks-av1s-folder (ks-tools) v${VERSION} (${M_DATE})"
 echo ""
-echo "- Convert videos from folder to AV1 codec (Series)"
+echo "- Convert videos from folder to AV1 (Codec) (Series)"
 echo ""
 echo -n "* Scanning ${1} "
 echo ""
@@ -123,9 +125,19 @@ else
   echo "* Files to convert (${1}):"
   convert_files=1
   if [ "${2}" == "subs" ] ; then
+    widescreen_enabled=0
     subtitles_enabled=1
     subtitles_show="with subtitles"
+  elif [ "${2}" == "widescreen" ] ; then
+    widescreen_enabled=1
+    subtitles_enabled=0
+    subtitles_show="without subtitles but forcing widescreen"
+  elif [ "${2}" == "subs-widescreen" ] ; then
+    widescreen_enabled=1
+    subtitles_enabled=1
+    subtitles_show="with subtitles and forcing widescreen"
   else
+    widescreen_enabled=0
     subtitles_enabled=0
     subtitles_show="without subtitles"
   fi
@@ -147,11 +159,21 @@ else
     while [ ${convert_files} -le ${num_files} ] ; do
       show_file=$(cat ${tempFile} | head -${convert_files} | tail -1)
       if [ ${subtitles_enabled} -eq 1 ] ; then
-        fname=$(echo "${show_file}" | cut -d "." -f 1)
-        ks-av1s-wrapper --conv-with-sub "${show_file}" "to-av1/${fname}"
+        if [ ${widescreen_enabled} -eq 1 ] ; then
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-av1s-wrapper --conv-with-sub-widescreen "${show_file}" "to-av1/${fname}"
+        else
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-av1s-wrapper --conv-with-sub "${show_file}" "to-av1/${fname}"
+        fi
       else
-        fname=$(echo "${show_file}" | cut -d "." -f 1)
-        ks-av1s-wrapper --conv "${show_file}" "to-av1/${fname}"
+        if [ ${widescreen_enabled} -eq 1 ] ; then
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-av1s-wrapper --conv-widescreen "${show_file}" "to-av1/${fname}"
+        else
+          fname=$(echo "${show_file}" | cut -d "." -f 1)
+          ks-av1s-wrapper --conv "${show_file}" "to-av1/${fname}"
+        fi
       fi
       convert_files=$(expr ${convert_files} + 1)
     done

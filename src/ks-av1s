@@ -2,12 +2,12 @@
 
 ############################################################
 # ks-av1s (ks-tools) - Convert video to AV1 codec (Series) #
-# Date: 04-01-2025                                         #
+# Date: 26-09-2025                                         #
 # Author: asdo92                                           #
 # Contact: asdo92@duck.com                                 #
 ############################################################
 VERSION="8.5"
-M_DATE="040125"
+M_DATE="260925"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -242,7 +242,7 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "  $ ks-av1s </absolute/path/video.mkv> </path/prefix_name>"
   echo ""
-  echo " + Example: ks-av1s /data/movies/Example.mkv /data/converted/Example"
+  echo " + Example: ks-av1s /data/series/Example.mkv /data/converted/Example"
   echo ""
   exit
 fi
@@ -256,6 +256,7 @@ else
   echo ""
   exit
 fi
+
 
 # Load profile for codecs
 profile_codec=" "
@@ -318,7 +319,7 @@ if [ -z "${2}" ] ; then
   echo ""
   echo "  $ ks-av1s </absolute/path/video.mkv> </path/prefix_name>"
   echo ""
-  echo " + Example: ks-av1s /data/movies/Example.mkv /data/converted/Example"
+  echo " + Example: ks-av1s /data/series/Example.mkv /data/converted/Example"
   echo ""
   exit
 else
@@ -424,6 +425,26 @@ else
       subtitle_track="${subtitle_track}"
     fi
   fi
+  echo -n "* (Default: n) Do you want to force widescreen (for 4:3 input)? (y/n): " ; read ask_force_widescreen
+  if [ "${ask_force_widescreen}" == "y" ] ; then
+    force_widescreen="y"
+    rel_size="720x480"
+    if [ "${subtitles_y_n}" == "y" ] ; then
+      p_conversion=${p_conversion}
+    else
+      if [ -z "${codec_h265_hevc}" ] ; then
+        p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-aspect 16:9 -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+      else
+        if [ -z "${hevc_hdr}" ] ; then
+          p_conversion="-s ${rel_size} -c:v ${vcodec}${profile_codec}-aspect 16:9 -pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+        else
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -aspect 16:9 -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+        fi
+      fi
+    fi
+  else
+    force_widescreen="n"
+  fi
   echo -n "* (Default: ${rel_size}) Type the resolution: " ; read resolution
   if [ -z "${resolution}" ] ; then
     resolution="${rel_size}"
@@ -493,27 +514,43 @@ else
     if [ "${patch_thread}" == "y" ] ; then
       echo "  # Convert the file '${1}' to AV1 codec"
       if [ ! -z "${hevc_hdr}" ] ; then
-        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
-        echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+        if [ "${force_widescreen}" == "y" ] ; then
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -aspect 16:9 -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+        else
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+        fi
+        echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
       else
-        echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+        if [ "${force_widescreen}" == "y" ] ; then
+          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+        else
+          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+        fi
       fi
     else
       echo "  # Convert the file '${1}' to AV1 codec"
       if [ ! -z "${hevc_hdr}" ] ; then
-        p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
-        echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+        if [ "${force_widescreen}" == "y" ] ; then
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -aspect 16:9 -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+        else
+          p_conversion="-s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles=\"${2}.srt\"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec}"
+        fi
+        echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
       else
-        echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+        if [ "${force_widescreen}" == "y" ] ; then
+          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+        else
+          echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles=\"${2}.srt\" ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+        fi
       fi
     fi
   else
     if [ "${patch_thread}" == "y" ] ; then
       echo "  # Convert the file '${1}' to AV1 codec"
-      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" ${p_ffmpeg_patched} \"${2}.${v_ext}\""
     else
       echo "  # Convert the file '${1}' to AV1 codec"
-      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title}\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title}\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
+      echo "  ${p_ffmpeg} \"${1}\" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title=\"${name_title} (${year_file})\" -metadata date=\"${year_file}\" -metadata genre=\"${genre_file}\" -metadata:s:v:0 title=\"${name_title} (${year_file})\" -metadata:s:a:0 title=\"${acodec} Stereo Audio (${b_acodec})\" \"${2}.${v_ext}\""
     fi
   fi
   # Execute commands for conversion
@@ -526,22 +563,38 @@ else
       ${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
       if [ "${patch_thread}" == "y" ] ; then
         if [ ! -z "${hevc_hdr}" ] ; then
-          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          if [ "${force_widescreen}" == "y" ] ; then
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -aspect 16:9 -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          else
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          fi
         else
-          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          if [ "${force_widescreen}" == "y" ] ; then
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          else
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+          fi
         fi
       else
         if [ ! -z "${hevc_hdr}" ] ; then
-          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          if [ "${force_widescreen}" == "y" ] ; then
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -aspect 16:9 -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          else
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -s ${rel_size} -c:v ${vcodec} -vf zscale=t=linear:npl=100,format=gbrpf32le,zscale=p=bt709,tonemap=tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv,subtitles="${2}.srt"${profile_codec}-pix_fmt yuv420p -b:v ${b_vcodec} -c:a ${acodec} -b:a ${b_acodec} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          fi
         else
-          ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          if [ "${force_widescreen}" == "y" ] ; then
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -aspect 16:9 -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          else
+            ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} -vf subtitles="${2}.srt" ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+          fi
         fi
       fi
     else
       if [ "${patch_thread}" == "y" ] ; then
-        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
+        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" ${p_ffmpeg_patched} "${2}.${v_ext}"
       else
-        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title}" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title}" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
+        ${p_ffmpeg} "${1}" ${f_conversion} -map ${video_track} -map ${audio_track} ${p_conversion} ${stereo_params} -metadata title="${name_title} (${year_file})" -metadata date="${year_file}" -metadata genre="${genre_file}" -metadata:s:v:0 title="${name_title} (${year_file})" -metadata:s:a:0 title="${acodec} Stereo Audio (${b_acodec})" "${2}.${v_ext}"
       fi
     fi
   fi

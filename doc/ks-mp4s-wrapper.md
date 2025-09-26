@@ -1,5 +1,5 @@
 ks-mp4s-wrapper - Wrapper for ks-mp4s to create graphical interfaces.
-===================================================================
+=====================================================================
 
 ### TRACKS/CONFIG DETECT:
 
