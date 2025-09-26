@@ -4,7 +4,7 @@ ks-av1s-folder - Convert videos from folder to AV1 Codec (Series).
 ### Syntax:
 
 ```shell
-$ ks-av1s-folder </path/folder> [subs]
+$ ks-av1s-folder </path/folder> [subs/widescreen/subs-widescreen]
 ```
 
 ### Examples:
@@ -20,7 +20,19 @@ $ ks-av1s-folder </path/folder> [subs]
     ```shell
     $ ks-av1s-folder /data/Daredevil subs
     ````
-    
+
+  * Convert forcing widescreen (for 4:3 input):
+
+    ```shell
+    $ ks-av1s-folder /data/Daredevil widescreen
+    ````
+
+  * Convert with subtitles and forcing widescreen (for 4:3 input):
+
+    ```shell
+    $ ks-av1s-folder /data/Daredevil subs-widescreen
+    ````
+
   * When executing the command you will see the following wizard:
   
     ```shell
