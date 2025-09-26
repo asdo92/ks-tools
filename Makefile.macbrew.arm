@@ -1,5 +1,5 @@
 #################################################
-# Installing ks-tools (Linux Homebrew)          #
+# Installing ks-tools (MacOS Homebrew ARM)      #
 #################################################
 
 PREFIX=/opt/homebrew
