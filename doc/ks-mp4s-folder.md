@@ -4,7 +4,7 @@ ks-mp4s-folder - Convert videos from folder to MP4 format (Series).
 ### Syntax:
 
 ```shell
-$ ks-mp4s-folder </path/folder> [subs]
+$ ks-mp4s-folder </path/folder> [subs/widescreen/subs-widescreen]
 ```
 
 ### Examples:
@@ -20,7 +20,19 @@ $ ks-mp4s-folder </path/folder> [subs]
     ```shell
     $ ks-mp4s-folder /data/Daredevil subs
     ````
-    
+
+  * Convert forcing widescreen (for 4:3 input):
+
+    ```shell
+    $ ks-mp4s-folder /data/Daredevil widescreen
+    ````
+
+  * Convert with subtitles and forcing widescreen (for 4:3 input):
+
+    ```shell
+    $ ks-mp4s-folder /data/Daredevil subs-widescreen
+    ````
+
   * When executing the command you will see the following wizard:
   
     ```shell
