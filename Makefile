@@ -61,6 +61,7 @@ install:
 	chmod +x $(PREFIX)/bin/ks-av1s-wrapper
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
+	cp -rf man/*.1 $(PREFIX)/share/man/man1/
 	
 compile:
 	mkdir -p build/
@@ -282,7 +283,8 @@ compile-install:
 	chmod +x $(PREFIX)/bin/ks-av1s-wrapper
 	cp -rf cygwin/cygwin-path $(PREFIX)/bin/cygwin-path
 	chmod +x $(PREFIX)/bin/cygwin-path
-	
+	cp -rf man/*.1 $(PREFIX)/share/man/man1/
+
 compile-clean:
 	rm -rf build/ks-avi
 	rm -rf build/ks-crop
@@ -341,3 +343,4 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-av1-wrapper
 	rm -rf $(PREFIX)/bin/ks-av1s-wrapper
 	rm -rf $(PREFIX)/bin/cygwin-path
+	rm -rf $(PREFIX)/share/man/man1/ks-*.1
