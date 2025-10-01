@@ -63,6 +63,7 @@ install:
 	chmod +x $(PREFIX)/bin/cygwin-path
 	cp -rf cygwin/cygwin-alias.sh $(PREFIX)/bin
 	chmod +x $(PREFIX)/bin/cygwin-alias.sh
+	cp -rf man/*.1 $(PREFIX)/share/man/man1/
 
 uninstall:
 	rm -rf $(PREFIX)/bin/ks-upv
@@ -94,3 +95,4 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-av1s-wrapper
 	rm -rf $(PREFIX)/bin/cygwin-path
 	rm -rf $(PREFIX)/bin/cygwin-alias.sh
+	rm -rf $(PREFIX)/share/man/man1/ks-*.1
