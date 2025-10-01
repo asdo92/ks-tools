@@ -25,7 +25,10 @@ default_lang_audio="spa"
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
   shopt -s expand_aliases
+  cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
+else
+  cygwin="no"
 fi
 
 # Create inicial config file
@@ -183,10 +186,19 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "+ Syntax: "
   echo ""
-  echo "  $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>"
-  echo ""
-  echo " + Example: ks-mp3 /data/songs/Example.ogg /data/converted/Example"
-  echo ""
+  if [ "${cygwin}" == "yes" ] ; then
+    echo "  $ ks-mp3 <relative/path/song.ogg> <path/prefix_name>"
+    echo ""
+    echo " + Example: ks-mp3 songs/Example.ogg converted/Example"
+    echo ""
+    echo "* Note: In Cygwin, you must use relative paths with this tool"
+    echo ""
+  else
+    echo "  $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>"
+    echo ""
+    echo " + Example: ks-mp3 /data/songs/Example.ogg /data/converted/Example"
+    echo ""
+  fi
   exit
 fi
 if [ -f "${1}" ] ; then
@@ -219,10 +231,19 @@ if [ -z "${2}" ] ; then
   echo ""
   echo "+ Syntax: "
   echo ""
-  echo "  $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>"
-  echo ""
-  echo " + Example: ks-mp3 /data/songs/Example.ogg /data/converted/Example"
-  echo ""
+  if [ "${cygwin}" == "yes" ] ; then
+    echo "  $ ks-mp3 <relative/path/song.ogg> <path/prefix_name>"
+    echo ""
+    echo " + Example: ks-mp3 songs/Example.ogg converted/Example"
+    echo ""
+    echo "* Note: In Cygwin, you must use relative paths with this tool"
+    echo ""
+  else
+    echo "  $ ks-mp3 </absolute/path/song.ogg> </path/prefix_name>"
+    echo ""
+    echo " + Example: ks-mp3 /data/songs/Example.ogg /data/converted/Example"
+    echo ""
+  fi
   exit
 else
   echo ""

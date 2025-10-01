@@ -45,7 +45,10 @@ v_ext="webm"
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
   shopt -s expand_aliases
+  cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
+else
+  cygwin="no"
 fi
 
 # Setting the correct resolution for the video file
@@ -240,10 +243,19 @@ if [ -z "${1}" ] ; then
   echo ""
   echo "+ Syntax: "
   echo ""
-  echo "  $ ks-av1 </absolute/path/video.mkv> </path/prefix_name>"
-  echo ""
-  echo " + Example: ks-av1 /data/movies/Example.mkv /data/converted/Example"
-  echo ""
+  if [ "${cygwin}" == "yes" ] ; then
+    echo "  $ ks-av1 <relative/path/video.mkv> <path/prefix_name>"
+    echo ""
+    echo " + Example: ks-av1 movies/Example.mkv converted/Example"
+    echo ""
+    echo "* Note: In Cygwin, you must use relative paths with this tool"
+    echo ""
+  else
+    echo "  $ ks-av1 </absolute/path/video.mkv> </path/prefix_name>"
+    echo ""
+    echo " + Example: ks-av1 /data/movies/Example.mkv /data/converted/Example"
+    echo ""
+  fi
   exit
 fi
 if [ -f "${1}" ] ; then
@@ -317,10 +329,19 @@ if [ -z "${2}" ] ; then
   echo ""
   echo "+ Syntax: "
   echo ""
-  echo "  $ ks-av1 </absolute/path/video.mkv> </path/prefix_name>"
-  echo ""
-  echo " + Example: ks-av1 /data/movies/Example.mkv /data/converted/Example"
-  echo ""
+  if [ "${cygwin}" == "yes" ] ; then
+    echo "  $ ks-av1 <relative/path/video.mkv> <path/prefix_name>"
+    echo ""
+    echo " + Example: ks-av1 movies/Example.mkv converted/Example"
+    echo ""
+    echo "* Note: In Cygwin, you must use relative paths with this tool"
+    echo ""
+  else
+    echo "  $ ks-av1 </absolute/path/video.mkv> </path/prefix_name>"
+    echo ""
+    echo " + Example: ks-av1 /data/movies/Example.mkv /data/converted/Example"
+    echo ""
+  fi
   exit
 else
   echo ""
