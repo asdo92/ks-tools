@@ -17,7 +17,10 @@ rel_size="720x480"
 # Check cygwin alias (for Windows)
 if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
   shopt -s expand_aliases
+  cygwin="yes"
   source "/usr/bin/cygwin-alias.sh"
+else
+  cygwin="no"
 fi
 
 # Check if ffmpeg is installed
@@ -144,6 +147,9 @@ function showHelp() {
   echo ""
   echo " + The option 'patch' apply the '-thread_queue_size 2048' patch to ffmpeg."
   echo " + If you specify a path or file with spaces, you must use quotes."
+  if [ "${cygwin}" == "yes" ] ; then
+    echo " + In Cygwin, you should always use relative paths with this tool."
+  fi
   echo ""
   exit
 }
