@@ -2,7 +2,7 @@
 
 #####################################################################
 # ks-mix (ks-tools) - Extract video/audio and mix video/audio files #
-# Date: 04-01-2025                                                  #
+# Date: 05-01-2025                                                  #
 # Author: asdo92                                                    #
 # Contact: asdo92@duck.com                                          #
 #####################################################################
@@ -126,6 +126,7 @@ function show_menu() {
   echo "  $ ks-mix -evti <video-file>  --> Extract video from a specific hour/minute/second"
   echo "  $ ks-mix -eati <video-file>  --> Extract audio from a specific hour/minute/second"
   echo "  $ ks-mix -evat <video-file>  --> Extract video + audio from specific time"
+  echo "  $ ks-mix -frag <video-file>  --> Extract video + audio in specific time fragments"
   echo "  $ ks-mix -chec <video-file>  --> Analyze tracks of video file"
   echo "  $ ks-mix -mixf               --> Mix video and audio file"
   echo "  $ ks-mix -mixs               --> Mix video, audio and subtitle file"
@@ -1280,6 +1281,97 @@ elif [ "${1}" == "-evat" ] ; then
         exit
       fi
     fi
+  else
+    echo ""
+    echo "* The file '${2}' does not exist"
+    echo ""
+    exit
+  fi
+elif [ "${1}" == "-frag" ] ; then
+  # Run commands for -frag parameter
+  if [ -z "${2}" ] ; then
+    show_menu
+  elif [ -f "${2}" ] ; then
+    fragment_default="55"
+    echo ""
+    echo "+ Video Tracks:"
+    ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 1
+    echo ""
+    echo "+ Audio Tracks:"
+    ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d "," -f 1
+    echo ""
+    echo "+ Video time:"
+    ffmpeg -i "${2}" 2>&1 | grep "Duration" | cut -d "," -f 1 | tr -s " "
+    echo ""
+    # Check de video track by default
+    video_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    if [ -z "${video_default}" ] ; then
+      video_default="0:0"
+    else
+      video_default_patch=$(echo ${video_default} | cut -c4)
+      if [ "${video_default_patch}" == ":" ] ; then
+        video_default=$(echo ${video_default} | cut -c1-3)
+      else
+        video_default="${video_default}"
+      fi
+    fi
+    # Ask for video
+    echo -n "* (Default: ${video_default}) Type the number of video track: " ; read video_track
+    if [ -z "${video_track}" ] ; then
+      video_track="${video_default}"
+    else
+      video_track="${video_track}"
+    fi
+    # Check the audio track by default
+    audio_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | grep "(${default_lang_audio})" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+    if [ -z "${audio_default}" ] ; then
+      audio_default=$(ffmpeg -i "${2}" 2>&1 | grep Stream | tr -s " " | grep "Audio:" | cut -d " " -f 3 | cut -c2-5 | cut -d "(" -f 1 | cut -d "[" -f 1 | head -1)
+      if [ -z "${audio_default}" ] ; then
+        audio_default="0:1"
+      else
+        audio_default_patch=$(echo ${audio_default} | cut -c4)
+        if [ "${audio_default_patch}" == ":" ] ; then
+          audio_default=$(echo ${audio_default} | cut -c1-3)
+        else
+          audio_default="${audio_default}"
+        fi
+      fi
+    else
+      audio_default_patch=$(echo ${audio_default} | cut -c4)
+      if [ "${audio_default_patch}" == ":" ] ; then
+        audio_default=$(echo ${audio_default} | cut -c1-3)
+      else
+        audio_default="${audio_default}"
+      fi
+    fi
+    # Ask for audio
+    echo -n "* (Default: ${audio_default}) Type the number of audio track: " ; read audio_track
+    if [ -z "${audio_track}" ] ; then
+      audio_track="${audio_default}"
+    else
+      audio_track="${audio_track}"
+    fi
+    # Ask for secons of fragments
+    echo -n "* (Default: ${fragment_default}) Type the number of seconds for each fragment: " ; read seconds_fragments
+    if [ -z "${seconds_fragments}" ] ; then
+      seconds_fragments="${fragment_default}"
+    else
+      seconds_fragments="${seconds_fragments}"
+    fi
+    filename_frag=$(basename "${2}")
+    filename_cut=$(basename "${2}" | cut -d "." -f 1)
+    dirname_frag=$(dirname "${2}")
+    cd ${dirname_frag}
+    mkdir -p fragments
+    echo ""
+    echo -n "* Starting extract video and audio in fragments (${2}) "
+    sleep 3
+    ffmpeg -y -i "${filename_frag}" -map ${video_track} -map ${audio_track} -c:v copy -c:a copy -f segment -segment_time ${seconds_fragments} -reset_timestamps 1 "fragments/${filename_cut}-%03d.mp4"
+    echo ""
+    echo -n "* Extracted fragments into ${dirname_frag}/fragments "
+    sleep 3
+    echo ""
+    exit
   else
     echo ""
     echo "* The file '${2}' does not exist"
