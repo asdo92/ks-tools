@@ -4,8 +4,8 @@
 # Require: pandoc
 
 # Variables
-date_name="Oct 04, 2025"
-date_number="2025-10-04"
+date_name="Oct 05, 2025"
+date_number="2025-10-05"
 
 # Generate man files
 pandoc -s ../doc/ks-av1.md -t man -o ks-av1.1
