@@ -2,12 +2,12 @@
 
 ###############################################################
 # ks-crop (ks-tools) - Crop or change aspect ratio of a video #
-# Date: 04-01-2025                                            #
+# Date: 05-01-2025                                            #
 # Author: asdo92                                              #
 # Contact: asdo92@duck.com                                    #
 ###############################################################
 VERSION="9.0"
-M_DATE="040125"
+M_DATE="050125"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -35,9 +35,9 @@ to4_3="1920x1440"
 to16_9="1920x1080"
 to5_4="1920x1540"
 toImax="1920x1346"
-v_preset="medium"
+v_preset="fast"
 vcodec="libx264"
-b_vcodec="5000k"
+b_vcodec="6000k"
 acodec="copy"
 v_ext="mkv"
 default_lang_audio="spa"
@@ -220,11 +220,7 @@ else
 fi
 
 # Detect resolution of video file
-detect_2=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 2 | cut -d "[" -f 1 | tr -s " " | grep x)
-detect_3=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 3 | cut -d "[" -f 1 | tr -s " " | grep x)
-detect_4=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 4 | cut -d "[" -f 1 | tr -s " " | grep x)
-detect_5=$(ffmpeg -i ${2} 2>&1 | grep Stream | tr -s " " | grep "Video:" | cut -d "," -f 5 | cut -d "[" -f 1 | tr -s " " | grep x)
-resolution_detected="${detect_2}${detect_3}${detect_4}${detect_5}"
+resolution_detected="$(ffmpeg -i "${2}" 2>&1 |  grep Stream | tr -s " " | grep "Video:" | sed -E 's/.* ([0-9]+x[0-9]+) .*/\1/' | head -1)"
 resolution_height=$(echo ${resolution_detected} | cut -d "x" -f 2)
 
 # Set size crop to 16:9 (ih)
