@@ -70,7 +70,13 @@ _Note: Extracted video will be named `video.mkv` and extracted audio will be nam
     ```shell
     $ ks-mix -evat /data/movies/Example.mkv
     ````
+
+  * Extract video + audio in specific time fragments:
     
+    ```shell
+    $ ks-mix -frag /data/movies/Example.mkv
+    ````
+
 _Note: After executing the command, an assistant will ask us from what hour, minute and second we want to cut the video. We can cut it to the end or the specified time._
     
 ### Examples (Mix video/audio):
