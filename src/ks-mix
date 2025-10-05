@@ -6,7 +6,7 @@
 # Author: asdo92                                                    #
 # Contact: asdo92@duck.com                                          #
 #####################################################################
-VERSION="9.0"
+VERSION="9.1"
 M_DATE="040125"
 
 # Detect version ffmpeg for old releases
