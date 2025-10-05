@@ -156,6 +156,9 @@ function show_menu() {
   echo "    ks-crop -16:9-crop /data/movies/Example.mkv"
   echo "    ks-crop -4:3-aspect /data/movies/Video.avi"
   echo ""
+  echo " + Example with folder: "
+  echo '    for i in $(ls -1 /<folder>/*) ; do echo -e "\n\n\n\n\n" | ks-crop -16:9-crop $i; done'
+  echo ""
   exit
 }
 
