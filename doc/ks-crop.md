@@ -63,7 +63,13 @@ $ ks-crop -5:4-aspect <video-file>  --> Change aspect to 5:4 (stretched)
     ```shell
     $ ks-crop -imax-crop /data/movies/Example.mkv
     ````
+
+  * Crop from 4:3/IMAX to 16:9 a folder of video files:
     
+    ```shell
+    $ for i in $(ls -1 /<folder>/*) ; do echo -e "\n\n\n\n\n" | ks-crop -16:9-crop $i; done
+    ````
+
 _Note: Output file name will be `Example-crop.mkv`._
 
 ### Examples (Change aspect):
