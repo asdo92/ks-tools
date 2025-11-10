@@ -42,7 +42,7 @@ ks-tools - Tools for upload, convert and crop/mix video/audio files.
     * [ks-vob-wrapper](/doc/ks-vob-wrapper.md) - Wrapper for ks-vob to create graphical interfaces.
     * [ks-av1-wrapper](/doc/ks-av1-wrapper.md) - Wrapper for ks-av1 to create graphical interfaces.
     * [ks-av1s-wrapper](/doc/ks-av1s-wrapper.md) - Wrapper for ks-av1s to create graphical interfaces.
-    * [ks-utfs](README.md) - Patch UTF-8 subtitles file(s) replacing bad caracters.
+    * [ks-utfs](doc/ks-utfs.md) - Patch UTF-8 subtitles file(s) replacing bad caracters.
     * [ks-conf](/doc/ks-conf.md) - Tool for create and modify all configuration files. 
 
 ### Installation:
