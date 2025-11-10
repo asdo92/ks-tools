@@ -2,12 +2,12 @@
 
 ############################################################
 # ks-av1s (ks-tools) - Convert video to AV1 codec (Series) #
-# Date: 26-09-2025                                         #
+# Date: 10-11-2025                                         #
 # Author: asdo92                                           #
 # Contact: asdo92@duck.com                                 #
 ############################################################
 VERSION="9.1"
-M_DATE="260925"
+M_DATE="101125"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -197,17 +197,17 @@ function removeExtension() {
   mkdir -p ${ksToolsTempFolder} && chmod 777 -R ${ksToolsTempFolder} 2> /dev/null
   echo "${wordToConvert}" > ${ksToolsSedFile}
   # Remove extensions
-  sed -i 's/.avi//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.mp4//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.mkv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i "s/.mov//g" "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.vob//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.mpg//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.mpeg//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.wmv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.ogv//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.webm//g' "${ksToolsSedFile}" &> /dev/null
-  sed -i 's/.flv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.avi//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.mp4//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.mkv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.mov//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.vob//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.mpg//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.mpeg//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.wmv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.ogv//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.webm//g' "${ksToolsSedFile}" &> /dev/null
+  sed -i 's/\.flv//g' "${ksToolsSedFile}" &> /dev/null
   # Show file without extension
   wordToConvert=$(cat ${ksToolsSedFile})
   echo ${wordToConvert}
