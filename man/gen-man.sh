@@ -4,8 +4,8 @@
 # Require: pandoc
 
 # Variables
-date_name="Oct 05, 2025"
-date_number="2025-10-05"
+date_name="Nov 10, 2025"
+date_number="2025-11-10"
 
 # Generate man files
 pandoc -s ../doc/ks-av1.md -t man -o ks-av1.1
@@ -40,6 +40,10 @@ pandoc -s ../doc/ks-conf.md -t man -o ks-conf.1
 sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-conf\" \"1\" \"${date_name}\" \"${date_number}\" \"Tool for create and modify configuration files\"/g" ks-conf.1
 sed -i 's/Back to README.md/Manual/g' ks-conf.1
 sed -i 's/Go back/This tool is part of ks-tools/g' ks-conf.1
+pandoc -s ../doc/ks-utfs.md -t man -o ks-utfs.1
+sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-utfs\" \"1\" \"${date_name}\" \"${date_number}\" \"Patch UTF-8 subtitles file(s) replacing bad caracters\"/g" ks-utfs.1
+sed -i 's/Back to README.md/Manual/g' ks-utfs.1
+sed -i 's/Go back/This tool is part of ks-tools/g' ks-utfs.1
 pandoc -s ../doc/ks-crop.md -t man -o ks-crop.1
 sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-crop\" \"1\" \"${date_name}\" \"${date_number}\" \"Crop or change aspect ratio of a video\"/g" ks-crop.1
 sed -i 's/Back to README.md/Manual/g' ks-crop.1
