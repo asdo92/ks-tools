@@ -45,6 +45,8 @@ install:
 	chmod +x $(PREFIX)/bin/ks-crop
 	cp -rf src/ks-conf $(PREFIX)/bin/ks-conf
 	chmod +x $(PREFIX)/bin/ks-conf
+	cp -rf src/ks-utfs $(PREFIX)/bin/ks-utfs
+	chmod +x $(PREFIX)/bin/ks-utfs
 	cp -rf wrapper/ks-mp4-wrapper $(PREFIX)/bin/ks-mp4-wrapper
 	chmod +x $(PREFIX)/bin/ks-mp4-wrapper
 	cp -rf wrapper/ks-mp4k-wrapper $(PREFIX)/bin/ks-mp4k-wrapper
@@ -85,6 +87,7 @@ compile:
 	cp -rf src/ks-av1 build
 	cp -rf src/ks-av1s build
 	cp -rf src/ks-conf build
+	cp -rf src/ks-utfs build
 	cp -rf wrapper/ks-avi-wrapper build
 	cp -rf wrapper/ks-mp4k-wrapper build
 	cp -rf wrapper/ks-mp4s-wrapper build
@@ -112,6 +115,7 @@ compile:
 	shc -rS -f build/ks-av1 -o build/ks-av1.out
 	shc -rS -f build/ks-av1s -o build/ks-av1s.out
 	shc -rS -f build/ks-conf -o build/ks-conf.out
+	shc -rS -f build/ks-utfs -o build/ks-utfs.out
 	shc -rS -f build/ks-avi-wrapper -o build/ks-avi-wrapper.out
 	shc -rS -f build/ks-mp4k-wrapper -o build/ks-mp4k-wrapper.out
 	shc -rS -f build/ks-mp4s-wrapper -o build/ks-mp4s-wrapper.out
@@ -139,6 +143,7 @@ compile:
 	rm -rf build/ks-av1.out
 	rm -rf build/ks-av1s.out
 	rm -rf build/ks-conf.out
+	rm -rf build/ks-utfs.out
 	rm -rf build/ks-avi-wrapper.out
 	rm -rf build/ks-mp4k-wrapper.out
 	rm -rf build/ks-mp4s-wrapper.out
@@ -191,6 +196,7 @@ compile:
 	mv build/ks-av1.x.c build/ks-av1.c
 	mv build/ks-av1s.x.c build/ks-av1s.c
 	mv build/ks-conf.x.c build/ks-conf.c
+	mv build/ks-utfs.x.c build/ks-utfs.c
 	mv build/ks-avi-wrapper.x.c build/ks-avi-wrapper.c
 	mv build/ks-mp4k-wrapper.x.c build/ks-mp4k-wrapper.c
 	mv build/ks-mp4s-wrapper.x.c build/ks-mp4s-wrapper.c
@@ -222,6 +228,7 @@ compile:
 	gcc -static build/ks-av1.c -o build/ks-av1
 	gcc -static build/ks-av1s.c -o build/ks-av1s
 	gcc -static build/ks-conf.c -o build/ks-conf
+	gcc -static build/ks-utfs.c -o build/ks-utfs
 	gcc -static build/ks-vob-wrapper.c -o build/ks-vob-wrapper
 	gcc -static build/ks-av1-wrapper.c -o build/ks-av1-wrapper
 	gcc -static build/ks-av1s-wrapper.c -o build/ks-av1s-wrapper
@@ -267,6 +274,8 @@ compile-install:
 	chmod +x $(PREFIX)/bin/ks-crop
 	cp -rf build/ks-conf $(PREFIX)/bin/ks-conf
 	chmod +x $(PREFIX)/bin/ks-conf
+	cp -rf build/ks-utfs $(PREFIX)/bin/ks-utfs
+	chmod +x $(PREFIX)/bin/ks-utfs
 	cp -rf build/ks-mp4-wrapper $(PREFIX)/bin/ks-mp4-wrapper
 	chmod +x $(PREFIX)/bin/ks-mp4-wrapper
 	cp -rf build/ks-mp4k-wrapper $(PREFIX)/bin/ks-mp4k-wrapper
@@ -306,6 +315,7 @@ compile-clean:
 	rm -rf build/ks-av1
 	rm -rf build/ks-av1s
 	rm -rf build/ks-conf
+	rm -rf build/ks-utfs
 	rm -rf build/ks-avi-wrapper
 	rm -rf build/ks-mp4k-wrapper
 	rm -rf build/ks-mp4s-wrapper
@@ -335,6 +345,7 @@ uninstall:
 	rm -rf $(PREFIX)/bin/ks-mix
 	rm -rf $(PREFIX)/bin/ks-crop
 	rm -rf $(PREFIX)/bin/ks-conf
+	rm -rf $(PREFIX)/bin/ks-utfs
 	rm -rf $(PREFIX)/bin/ks-mp4-wrapper
 	rm -rf $(PREFIX)/bin/ks-mp4k-wrapper
 	rm -rf $(PREFIX)/bin/ks-mp4s-wrapper
