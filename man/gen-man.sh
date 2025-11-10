@@ -41,7 +41,7 @@ sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-conf\" \"1\" \"${date_name}\" \"
 sed -i 's/Back to README.md/Manual/g' ks-conf.1
 sed -i 's/Go back/This tool is part of ks-tools/g' ks-conf.1
 pandoc -s ../doc/ks-utfs.md -t man -o ks-utfs.1
-sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-utfs\" \"1\" \"${date_name}\" \"${date_number}\" \"Patch UTF-8 subtitles file(s) replacing bad caracters\"/g" ks-utfs.1
+sed -i "s/.TH \"\" \"\" \"\" \"\" \"\"/.TH \"ks-utfs\" \"1\" \"${date_name}\" \"${date_number}\" \"Patch UTF-8 subtitles file(s) replacing bad characters\"/g" ks-utfs.1
 sed -i 's/Back to README.md/Manual/g' ks-utfs.1
 sed -i 's/Go back/This tool is part of ks-tools/g' ks-utfs.1
 pandoc -s ../doc/ks-crop.md -t man -o ks-crop.1

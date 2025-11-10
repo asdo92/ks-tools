@@ -1,5 +1,5 @@
-ks-utfs - Patch UTF-8 subtitles file(s) replacing bad caracters
-===============================================================
+ks-utfs - Patch UTF-8 subtitles file(s) replacing bad characters
+================================================================
 
 ### Syntax:
 
