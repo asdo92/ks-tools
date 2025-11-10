@@ -81,6 +81,7 @@ if [ -z "${1}" ] ; then
   show_help
 else
   if [ -f "${1}" ] ; then
+    # Replace UTF-8 bad caracters
     sed -i 's/Ã¡/á/g' "${1}"
     sed -i 's/Ã©/é/g' "${1}"
     sed -i 's/Ã³/ó/g' "${1}"
@@ -131,6 +132,9 @@ else
     sed -i 's/Ã­/í/g' "${1}"
     sed -i 's/Ã/Á/g' "${1}"
     sed -i 's/Ã­/Í/g' "${1}"
+    # Delete text from ass to srt
+    sed -i 's/<font size="[0-9]\+">//g' "${1}"
+    sed -i 's/<\/font>//g' test.srt
   else
     echo "* The file '${1}' does not exist!"
   fi
