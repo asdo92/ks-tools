@@ -134,7 +134,7 @@ else
     sed -i 's/Ã­/Í/g' "${1}"
     # Delete text from ass to srt
     sed -i 's/<font size="[0-9]\+">//g' "${1}"
-    sed -i 's/<\/font>//g' test.srt
+    sed -i 's/<\/font>//g' "${1}"
   else
     echo "* The file '${1}' does not exist!"
   fi
