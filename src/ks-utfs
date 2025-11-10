@@ -1,0 +1,137 @@
+#!/bin/bash
+
+##########################################################################
+# ks-utfs (ks-tools) - Fix UTF-8 subtitles files replacing bad caracters #
+# Date: 09-11-2025                                                       #
+# Author: asdo92                                                         #
+# Contact: asdo92@duck.com                                               #
+##########################################################################
+VERSION="9.1"
+M_DATE="091125"
+
+# Check cygwin alias (for Windows)
+if [ -f "/usr/bin/cygwin-alias.sh" ] ; then
+  shopt -s expand_aliases
+  cygwin="yes"
+  source "/usr/bin/cygwin-alias.sh"
+else
+  cygwin="no"
+fi
+
+# Check if commands are installed
+path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
+dependencies="grep sed cut"
+dependencies_found=""
+dependencies_not_found=""
+for checkPath in ${path_check} ; do
+  for checkDependencies in ${dependencies} ; do
+    if [ -f ${checkPath}/${checkDependencies} ] ; then
+      dependencies_found="${dependencies_found} ${checkDependencies}"
+    fi
+  done
+done
+for notFound in ${dependencies} ; do
+  check_found_one=$(echo ${dependencies_found} | grep " ${notFound}")
+  check_found_two=$(echo ${dependencies_found} | grep "${notFound} ")
+  if_not_found="${check_found_one}${check_found_two}"
+  if [ -z "${if_not_found}" ] ; then
+    dependencies_not_found="${dependencies_not_found} ${notFound}"
+  fi
+done
+# Show if all tools are installed
+if [ -z "${dependencies_not_found}" ] ; then
+  echo > /dev/null
+else
+  echo ""
+  echo "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "* Some required tools are not installed:${dependencies_not_found}"
+  echo "* The process has been stopped"
+  echo ""
+  exit
+fi
+
+# Show help
+function show_help() {
+  echo ""
+  echo "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
+  echo ""
+  echo "- Fix UTF-8 subtitles file(s) replacing bad caracters"
+  echo ""
+  echo "+ Syntax: "
+  echo ""
+  if [ "${cygwin}" == "yes" ] ; then
+    echo "  $ ks-utfs <relative/path/subtitle.srt>"
+    echo ""
+    echo " + Example: ks-utfs movies/Spiderman.srt"
+    echo ""
+    echo "* Note: In Cygwin, you must use relative paths with this tool"
+    echo ""
+  else
+    echo "  $ ks-utfs </absolute/path/subtitle.srt>"
+    echo ""
+    echo " + Example: ks-utfs /data/movies/Spiderman.srt"
+    echo ""
+  fi
+  exit
+}
+
+# Replace bad caracters if file exist
+if [ -z "${1}" ] ; then
+  show_help
+else
+  if [ -f "${1}" ] ; then
+    sed -i 's/Ã¡/á/g' "${1}"
+    sed -i 's/Ã©/é/g' "${1}"
+    sed -i 's/Ã³/ó/g' "${1}"
+    sed -i 's/Ãº/ú/g' "${1}"
+    sed -i 's/Ã±/ñ/g' "${1}"
+    sed -i 's/Ã¼/ü/g' "${1}"
+    sed -i 's/Ã§/ç/g' "${1}"
+    sed -i 's/Ã¼/ü/g' "${1}"
+    sed -i 's/Ã“/Ó/g' "${1}"
+    sed -i 's/Ãš/Ú/g' "${1}"
+    sed -i 's/Ã‘/Ñ/g' "${1}"
+    sed -i 's/Ã‡/Ç/g' "${1}"
+    sed -i 's/Ãœ/Ü/g' "${1}"
+    sed -i 's/Ã‰/É/g' "${1}"
+    sed -i 's/Â¡/¡/g' "${1}"
+    sed -i 's/Â¿/¿/g' "${1}"
+    sed -i 's/Â©/©/g' "${1}"
+    sed -i 's/Â£/£/g' "${1}"
+    sed -i 's/Â¥/¥/g' "${1}"
+    sed -i 's/Â°/°/g' "${1}"
+    sed -i 's/Âª/ª/g' "${1}"
+    sed -i 's/Â®/®/g' "${1}"
+    sed -i 's/Âµ/µ/g' "${1}"
+    sed -i 's/Âº/º/g' "${1}"
+    sed -i 's/Ã€/À/g' "${1}"
+    sed -i 's/Ã„/Ä/g' "${1}"
+    sed -i 's/Ã†/Æ/g' "${1}"
+    sed -i 's/Ãˆ/È/g' "${1}"
+    sed -i 's/Ã‹/Ë/g' "${1}"
+    sed -i 's/ÃŒ/Ì/g' "${1}"
+    sed -i 's/Ã–/Ö/g' "${1}"
+    sed -i 's/Ã˜/Ø/g' "${1}"
+    sed -i 's/Ã›/Û/g' "${1}"
+    sed -i 's/Ãœ/Ü/g' "${1}"
+    sed -i 's/Ã¤/ä/g' "${1}"
+    sed -i 's/Ã¨/è/g' "${1}"
+    sed -i 's/Ã«/ë/g' "${1}"
+    sed -i 's/Ã¬/ì/g' "${1}"
+    sed -i 's/Ã¯/ï/g' "${1}"
+    sed -i 's/Ã²/ò/g' "${1}"
+    sed -i 's/Ã´/ô/g' "${1}"
+    sed -i 's/Ã¶/ö/g' "${1}"
+    sed -i 's/Ã·/÷/g' "${1}"
+    sed -i 's/Ã¸/ø/g' "${1}"
+    sed -i 's/Ã½/ý/g' "${1}"
+    sed -i 's/Ã¾/þ/g' "${1}"
+    sed -i 's/Ã¿/ÿ/g' "${1}"
+    sed -i 's/Ã­/í/g' "${1}"
+    sed -i 's/Ã/Á/g' "${1}"
+    sed -i 's/Ã­/Í/g' "${1}"
+  else
+    echo "* The file '${1}' does not exist!"
+  fi
+fi
