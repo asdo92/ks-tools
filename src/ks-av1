@@ -138,7 +138,7 @@ fi
 
 # Check if ffmpeg is installed
 path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
-dependencies="ffmpeg grep sed grep cut head tail tr cat bc"
+dependencies="ffmpeg grep sed grep cut head tail tr cat bc ks-utfs"
 dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
@@ -532,6 +532,9 @@ else
     echo "  # Extract subtitles from file ${1}"
     echo "  ${p_ffmpeg} \"${1}\" -map ${subtitle_track} \"${2}.srt\""
     echo ""
+    echo "  # Patch UTF-8 characters (Recommended)"
+    echo "  ks-utfs \"${2}.srt\""
+    echo ""
     if [ "${patch_thread}" == "y" ] ; then
       echo "  # Convert the file '${1}' to AV1 codec"
       if [ ! -z "${hevc_hdr}" ] ; then
@@ -582,6 +585,7 @@ else
   else
     if [ "${subtitles_y_n}" == "y" ] ; then
       ${p_ffmpeg} "${1}" -map ${subtitle_track} "${2}.srt"
+      ks-utfs "${2}.srt"
       if [ "${patch_thread}" == "y" ] ; then
         if [ ! -z "${hevc_hdr}" ] ; then
           if [ "${force_widescreen}" == "y" ] ; then

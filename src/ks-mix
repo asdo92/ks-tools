@@ -2,12 +2,12 @@
 
 #####################################################################
 # ks-mix (ks-tools) - Extract video/audio and mix video/audio files #
-# Date: 05-01-2025                                                  #
+# Date: 10-11-2025                                                  #
 # Author: asdo92                                                    #
 # Contact: asdo92@duck.com                                          #
 #####################################################################
 VERSION="9.1"
-M_DATE="040125"
+M_DATE="101125"
 
 # Detect version ffmpeg for old releases
 ffmpeg_version=$(ffmpeg -version 2>&1 | grep version | head -1 | cut -d " " -f 3 | cut -d "." -f 1)
@@ -44,7 +44,7 @@ fi
 
 # Check if ffmpeg is installed
 path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
-dependencies="ffmpeg grep sed cut head tail tr"
+dependencies="ffmpeg grep sed cut head tail tr ks-utfs"
 dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
@@ -531,6 +531,7 @@ elif [ "${1}" == "-esub" ] ; then
     echo -n "* Starting extract subtitles track (${2}) "
     sleep 3
     ffmpeg -y -i "${2}" -map ${subtitle_track} -c:s copy "${subs_file_dir}"
+    ks-utfs "${subs_file_dir}"
     echo ""
     echo -n "* Extracted subtitles into ${subs_file_dir}"
     sleep 2

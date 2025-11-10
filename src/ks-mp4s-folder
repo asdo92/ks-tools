@@ -22,7 +22,7 @@ fi
 
 # Check if ffmpeg is installed
 path_check="/usr/bin /bin /usr/local/bin ${HOME}/.local/bin $(brew --prefix 2> /dev/null)/bin"
-dependencies="ffmpeg grep find grep cut head tail cat"
+dependencies="ffmpeg grep find grep cut head tail cat ks-utfs"
 dependencies_found=""
 dependencies_not_found=""
 for checkPath in ${path_check} ; do
