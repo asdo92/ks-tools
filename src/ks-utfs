@@ -1,11 +1,11 @@
 #!/bin/bash
 
-##########################################################################
-# ks-utfs (ks-tools) - Fix UTF-8 subtitles files replacing bad caracters #
-# Date: 09-11-2025                                                       #
-# Author: asdo92                                                         #
-# Contact: asdo92@duck.com                                               #
-##########################################################################
+############################################################################
+# ks-utfs (ks-tools) - Patch UTF-8 subtitles files replacing bad caracters #
+# Date: 09-11-2025                                                         #
+# Author: asdo92                                                           #
+# Contact: asdo92@duck.com                                                 #
+############################################################################
 VERSION="9.1"
 M_DATE="091125"
 
@@ -56,7 +56,7 @@ function show_help() {
   echo ""
   echo "* ks-utfs (ks-tools) v${VERSION} (${M_DATE})"
   echo ""
-  echo "- Fix UTF-8 subtitles file(s) replacing bad caracters"
+  echo "- Patch UTF-8 subtitles file(s) replacing bad caracters"
   echo ""
   echo "+ Syntax: "
   echo ""
